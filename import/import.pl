@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 use strict;
 use DBI;
 use Term::ProgressBar;
@@ -168,7 +169,7 @@ sub import_directors {
             # new director
             $_ = $1;
             $id = $2;
-            if ($line =~ /([^,]+), ([^\(	]+)( \(([IVXLM]+)\))?$/) {
+            if (m/([^,]+), ([^\(	]+)( \(([IVXLM]+)\))?$/) {
                 $lastname = $1;
                 $firstname = $2;
                 $number = $4;
@@ -337,20 +338,26 @@ sub import_everything {
     import_writers;
 }
 
+sub create_tables {
+    `sqlite3 db.sqlite '.read create.sql'`;
+}
+
 sub quit {
     print "Disconnecting from the database\n";
     $dbh->disconnect();
     exit 0;
 }
 
-my @choices = ( "Import everything", "Import movies.list",
+my @choices = ( "Create the tables",
+                "Import everything", "Import movies.list",
                 "Import countries.list", "Import languages.list",
                 "Import genres.list", "Import directors.list",
                 "Import writers.list", "Import actors.list",
                 "Import actresses.list", "Clean the database",
                 "Quit",
     );
-my @functions = ( \&import_everything, \&import_movies,
+my @functions = ( \&create_tables,
+                  \&import_everything, \&import_movies,
                   \&import_countries, \&import_languages,
                   \&import_genres, \&import_directors,
                   \&import_writers, \&import_actors_male,

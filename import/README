@@ -1,0 +1,34 @@
+* Import script
+** Dependencies
+This script need the following perl modules to work (installable from
+the CPAN):
+  - DBI
+  - Term::ProgressBar
+
+Also, you need a relational DBMS installed on your system, and its DBI
+driver. We currently use SQLite, but if you want to use another one,
+change the first parameter to the `connect` call at the very beginning
+of the script.
+
+** Needed data files
+The data files needed by this script are the following (downloadable
+from ftp://ftp.fu-berlin.de/pub/misc/movies/database/).
+  - actors.list.gz
+  - actresses.list.gz
+  - countries.list.gz
+  - directors.list.gz
+  - genres.list.gz
+  - languages.list.gz
+  - movies.list.gz
+  - writers.list.gz
+
+They need to be gunzipped and placed in the current working directory.
+
+** Running the script
+First you need to create the SQLite database. To do so, run something
+like `sqlite3 db.sqlite '.read /path/to/create.sql'` (create.sql is in
+`../sql`). Then, execute the `import.pl` script.
+
+Note that the DBMS might complains (a lot) about failed
+constraints. This is because the data contained in the data file is
+sometimes present more than once.
