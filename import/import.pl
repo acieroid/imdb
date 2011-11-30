@@ -68,7 +68,7 @@ sub import_movies {
                     $serie_sth->execute($id, $end_year) or die $serie_sth->errstr;
                     $dbh->commit();
                 }
-                elsif ($id =~ /(.+) \(([0-9]{4})[^\)]\)$/) {
+                elsif ($id =~ /(.+) \(([0-9]{4})[^\)]*\)$/) {
                     $title = $1;
                     $date = $2;
                     $work_sth->execute($id, $title, $year) or die $work_sth->errstr;
