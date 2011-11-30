@@ -7,7 +7,7 @@ import pages
 
 application = tornado.web.Application([
     (r"/", pages.Main),
-    (r"/movie", pages.Movie),
+    (r"/movie/(.*)", pages.Movie),
 ])
 
 if __name__ == "__main__":
