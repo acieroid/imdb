@@ -15,11 +15,11 @@ class Movie(tornado.web.RequestHandler):
     
     movie = cur.fetchone()
 
-    cur.execute("select FirstName, LastName, Role from Actor where ID = ?", 
+    cur.execute("select FirstName, LastName, Role from Actor where ID = ?",
                 (movie_id,))
     actors = cur.fetchall()
 
     if movie:
       self.write(loader.load("movie.html").generate(movie=movie, actors=actors))
     else:
-      self.write(loader.load("not_found.html").generate())
+      self.write(loader.load("not_found.html").generate(message="Movie not found"))

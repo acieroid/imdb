@@ -6,7 +6,7 @@
   <body>
     <h1>{{ escape(title) }} ({{ year }})</h1>
     <ul>
-      {% for (fname,lname,role) in actors %}
+      {% for (fname, lname, role) in actors %}
       <li>{{ escape(fname) }} {{ escape(lname) }} : {{ escape(role) }}</li>
       {% end %}
     </ul>
