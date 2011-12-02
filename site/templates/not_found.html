@@ -1,8 +1,7 @@
-<html>
-  <head>
-    <title>Error</title>
-  </head>
-  <body>
-    <h1>{{ escape(message) }}</h1>
-  </body>
-</html>
+{% extends "base.html" %}
+{% block title %} Error {% end %}
+
+{% block body %}
+An error occured: {{ escape(message) }}
+{% end %}
+
