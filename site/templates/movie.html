@@ -8,14 +8,63 @@ Movie: {{ escape(title) }} ({{ year }})
 {% block body %}
 {% set (title, year, note) = movie %}
     <h1>{{ escape(title) }} ({{ year }})</h1>
-    Rating: 
+    <h3>Rating</h3> 
       {% if note %} {{ note }}
       {% else %} -
       {% end %}
-    /10<br/>
-    <ul>
-      {% for (fname, lname, role) in actors %}
-      <li>{{ escape(fname) }} {{ escape(lname) }} : {{ escape(role) }}</li>
-      {% end %}
-    </ul>
+    /10
+
+    <h3>Genres</h3>
+    {% if genres %}
+      {{ escape(', '.join(genres)) }}
+    {% else %}
+       No genres
+    {% end %}
+
+    <h3>Countries</h3>
+    {% if countries %}
+      {{ escape(', '.join(countries)) }}
+    {% else %}
+      No countries
+    {% end %}
+
+    <h3>Languages</h3>
+    {% if languages %}
+      {{ escape(', '.join(languages)) }}
+    {% else %}
+      No languages
+    {% end %}
+
+    <h3>Director(s)</h3>
+    {% if directors %}
+      <ul>
+        {% for (fname, lname, num) in directors %}
+        <li>{{ escape(fname) }} {{ escape(lname) }}</li>
+        {% end %}
+      </ul>
+    {% else %}
+      No director
+    {% end %}
+
+    <h3>Writer(s)</h3>
+    {% if writers %}
+      <ul>
+        {% for (fname, lname, num) in writers %}
+        <li>{{ escape(fname) }} {{ escape(lname) }}</li>
+        {% end %}
+      </ul>
+    {% else %}
+      No writer
+    {% end %}
+
+    <h3>Actors</h3>
+    {% if actors %}
+      <ul>
+        {% for (fname, lname, num, role) in actors %}
+        <li>{{ escape(fname) }} {{ escape(lname) }} as {{ escape(role) }}</li>
+        {% end %}
+      </ul>
+    {% else %}
+      No actor
+    {% end %}
 {% end %}
