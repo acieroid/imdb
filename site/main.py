@@ -7,6 +7,7 @@ import pages
 
 application = tornado.web.Application([
     (r"/", pages.Main),
+    (r"/search", pages.Search),
     (r"/movie/(.*)", pages.Movie),
 ])
 

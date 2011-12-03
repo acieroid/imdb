@@ -2,7 +2,7 @@ create table Work (
        ID varchar(512),
        Title varchar(512) not null,
        Year integer not null,
-       note integer,
+       Note integer,
        primary key (ID)
 );
 
@@ -22,7 +22,7 @@ create table Serie (
 create table Episode (
        ID varchar(512),
        Season integer not null,
-       Num integer not null,
+       EpisodeNum integer not null,
        Date integer,
        EpisodeTitle varchar(512),
        primary key (ID),

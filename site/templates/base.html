@@ -3,6 +3,10 @@
     <title>{% block title %}IMDB{% end %}</title>
   </head>
   <body>
+    <form action="/search" method="post">
+      <input type="text" name="search" id="search" />
+      <input type="submit" value="Search" />
+    </form>
     {% block body %} {% end %}
   </body>
 </html>
