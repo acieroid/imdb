@@ -169,7 +169,7 @@ sub import_directors {
             # new director
             $_ = $1;
             $id = $2;
-            if (m/([^,]+), ([^\(	]+)( \(([IVXLM]+)\))?$/) {
+            if (m/([^,]+)(, ([^\(	]+))?( \(([IVXLM]+)\))?$/) {
                 $lastname = $1;
                 $firstname = $2;
                 $number = $4;
