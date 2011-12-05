@@ -24,7 +24,13 @@ precedence = (
 t_OPERATOR = r"(and|or)"
 t_COMPARATOR = r"(>=|<=|<|>|==)"
 t_IDENTIFIER = r"[A-Z][a-zA-Z_]+"
-t_VALUE = r"(\"[^\"]+\"|[0-9]+)"
+def t_VALUE(t):
+    r"(\"[^\"]+\"|[0-9]+)"
+    if t.value[0] == '"':
+        t.value = t.value[1:-1]
+    else:
+        t.value = int(t.value)
+    return t
 t_LPAREN = "\("
 t_RPAREN = "\)"
 t_ignore_SPACE = r"\s+"
@@ -84,46 +90,59 @@ def convert(l):
         return in_list(x, ['Title', 'Year', 'Note', 'EndYear', 
                            'Season', 'EpisodeNum', 'EpisodeTitle',
                            'FirstName', 'LastName'])
+    def combine(a, op, b):
+        (res_a , params_a) = a
+        (res_b, params_b) = b
+        return (res_a + op + res_b, params_a + params_b)
     def helper(l):
+        # TODO: also return a list containing the l[2] and replace l[2] with '?'
         if l:
             if re.match(t_OPERATOR, l[0]):
-                return helper(l[1]) + conversion_table[l[0]] + helper(l[2])
+                return combine(helper(l[1]), conversion_table[l[0]], helper(l[2]))
+#                return helper(l[1]) + conversion_table[l[0]] + helper(l[2])
             elif re.match(t_COMPARATOR, l[0]):
                 if simple_identifier(l[1]):
-                    return l[1] + conversion_table[l[0]] + l[2] + ' '
+                    return combine((l[1], []), conversion_table[l[0]], ('?', [l[2]]))
+#                    return l[1] + conversion_table[l[0]] + l[2] + ' '
                 elif l[1] == 'Genre' or l[1] == 'Country' or l[1] == 'Language':
-                    return (l[2] +' in (select * from ' +
-                            l[1] + ' where ' + l[1] + '.ID = W.ID) ')
+                    return combine(('?', [l[2]]), 'in (select * from ' + l[1] 
+                                   + ' where ' + l[1] + '.ID = W.ID) ', ('', []))
+#                    return (l[2] +' in (select * from ' +
+#                            l[1] + ' where ' + l[1] + '.ID = W.ID) ')
         else:
-            return ''
+            return ('', [])
     if satisfies(l, lambda x: (x == 'EndYear' or
                                x == 'EpisodeNum' or
                                x == 'EpisodeTitle')):
-        return 'select ID from Serie W where ' + helper(l)
+        return (combine(('select ID from Serie W where ', []), '', helper(l)), 
+                'Serie')
     elif satisfies(l, lambda x: (x == 'FirstName' or
                                  x == 'LastName')):
-        return 'select FirstName, LastName, Num from Person where ' + helper(l)
+        return (combine(('select FirstName, LastName, Num from Person where ', 
+                        []), '', helper(l)),
+                'Person')
     else:
-        return 'select ID from Work W where ' + helper(l)
+        return (combine(('select ID from Work W where ', []), '', helper(l)),
+                'Movie')
 
 # Page
 class Search(tornado.web.RequestHandler):
-    def post(self):
-        l = ply.yacc.parse(self.get_argument('search', ''))
-        self.write(convert(l))
-        if satisfies(l, lambda x: x == 'EndYear'):
-            self.write('Serie')
-        elif satisfies(l, lambda x: (x == 'Season' or 
-                                     x == 'EpisodeNum' or
-                                     x == 'EpisodeTitle')):
-            self.write('Episode')
+    def get(self):
+        loader = tornado.template.Loader("templates/")
         
-        elif satisfies(l, lambda x: (x == 'FirstName' or
-                                     x == 'LastName')):
-            self.write('Person')
-        elif satisfies(l, lambda x: x == 'Title'):
-            self.write('Work')
-        else:
-            self.write(repr(l))
+        conn = sqlite3.connect("db.sqlite")
+        cur = conn.cursor()
+        
+        # parse the query
+        parsed = ply.yacc.parse(self.get_argument('search', ''))
+        ((query, args), typeofdata) = convert(parsed)
+        
+        # execute the query
+        cur.execute(query, *args)
+        results = cur.fetchall()
+        
+        cur.close()
 
+        self.write(loader.load('search.html').generate(results=results,
+                                                       typeofdata=typeofdata))
 
