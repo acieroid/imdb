@@ -2,12 +2,12 @@
 
 {% block title %}
 {% set (title, year, note) = movie %}
-Movie: {{ escape(title) }} ({{ year }})
+Movie: {{ title }} ({{ year }})
 {% end %}
 
 {% block body %}
 {% set (title, year, note) = movie %}
-    <h1>{{ escape(title) }} ({{ year }})</h1>
+    <h1>{{ title }} ({{ year }})</h1>
     <h3>Rating</h3> 
       {% if note %} {{ note }}
       {% else %} -
@@ -16,21 +16,21 @@ Movie: {{ escape(title) }} ({{ year }})
 
     <h3>Genres</h3>
     {% if genres %}
-      {{ escape(', '.join(genres)) }}
+      {{ ', '.join(genres) }}
     {% else %}
        No genres
     {% end %}
 
     <h3>Countries</h3>
     {% if countries %}
-      {{ escape(', '.join(countries)) }}
+      {{ ', '.join(countries) }}
     {% else %}
       No countries
     {% end %}
 
     <h3>Languages</h3>
     {% if languages %}
-      {{ escape(', '.join(languages)) }}
+      {{ ', '.join(languages) }}
     {% else %}
       No languages
     {% end %}
@@ -39,8 +39,8 @@ Movie: {{ escape(title) }} ({{ year }})
     {% if directors %}
       <ul>
         {% for (fname, lname, num) in directors %}
-        <li><a href="/person/{{ escape(fname) }}/{{ escape(lname) }}/{{ escape(num) }}">
-            {{ escape(fname) }} {{ escape(lname) }}</a></li>
+        <li><a href="/person/{{ fname }}/{{ lname }}/{{ num }}">
+            {{ fname }} {{ lname }}</a></li>
         {% end %}
       </ul>
     {% else %}
@@ -51,8 +51,8 @@ Movie: {{ escape(title) }} ({{ year }})
     {% if writers %}
       <ul>
         {% for (fname, lname, num) in writers %}
-        <li><a href="/person/{{ escape(fname) }}/{{ escape(lname) }}/{{ escape(num) }}">
-            {{ escape(fname) }} {{ escape(lname) }}</a></li>
+        <li><a href="/person/{{ fname }}/{{ lname }}/{{ num }}">
+            {{ fname }} {{ lname }}</a></li>
         {% end %}
       </ul>
     {% else %}
@@ -63,8 +63,8 @@ Movie: {{ escape(title) }} ({{ year }})
     {% if actors %}
       <ul>
         {% for (fname, lname, num, role) in actors %}
-        <li><a href="/person/{{ escape(fname) }}/{{ escape(lname) }}/{{ escape(num) }}">
-            {{ escape(fname) }} {{ escape(lname) }} as {{ escape(role) }}</a></li>
+        <li><a href="/person/{{ fname }}/{{ lname }}/{{ num }}">
+            {{ xfname }} {{ lname }} as {{ role }}</a></li>
         {% end %}
       </ul>
     {% else %}
