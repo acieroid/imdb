@@ -171,8 +171,8 @@ sub import_directors {
             $id = $2;
             if (m/([^,]+)(, ([^\(	]+))?( \(([IVXLM]+)\))?$/) {
                 $lastname = $1;
-                $firstname = $2;
-                $number = $4;
+                $firstname = $3;
+                $number = $5;
                 if (not defined $number) {
                     $number = '';
                 }
