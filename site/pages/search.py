@@ -8,52 +8,52 @@ import re
 
 # Query language
 tokens = (
-    "OPERATOR",
-    "COMPARATOR",
-    "IDENTIFIER",
-    "VALUE",
-    "LPAREN",
-    "RPAREN",
-    "SPACE"
+    'OPERATOR',
+    'COMPARATOR',
+    'IDENTIFIER',
+    'VALUE',
+    'LPAREN',
+    'RPAREN',
+    'SPACE'
 )
 
 precedence = (
-    ("left", "OPERATOR"),
+    ('left', 'OPERATOR'),
 )
 
-t_OPERATOR = r"(and|or)"
-t_COMPARATOR = r"(>=|<=|<|>|==)"
-t_IDENTIFIER = r"[A-Z][a-zA-Z_]+"
+t_OPERATOR = r'(and|or)'
+t_COMPARATOR = r'(>=|<=|<|>|==)'
+t_IDENTIFIER = r'[A-Z][a-zA-Z_]+'
 def t_VALUE(t):
-    r"(\"[^\"]+\"|[0-9]+)"
+    r'("[^"]+"|[0-9]+)'
     if t.value[0] == '"':
         t.value = t.value[1:-1]
     else:
         t.value = int(t.value)
     return t
-t_LPAREN = "\("
-t_RPAREN = "\)"
-t_ignore_SPACE = r"\s+"
+t_LPAREN = '\('
+t_RPAREN = '\)'
+t_ignore_SPACE = r'\s+'
 
 def t_error(t):
-    raise TypeError("Error when lexing '%s'" % t.value)
+    raise TypeError('error when lexing "%s"' % t.value)
 
 ply.lex.lex()
 
 def p_paren(p):
-    "condition : LPAREN condition RPAREN"
+    'condition : LPAREN condition RPAREN'
     p[0] = p[2]
 
 def p_op(p):
-    "condition : condition OPERATOR condition"
+    'condition : condition OPERATOR condition'
     p[0] = [p[2], p[1], p[3]]
 
 def p_comp(p):
-    "condition : IDENTIFIER COMPARATOR VALUE"
+    'condition : IDENTIFIER COMPARATOR VALUE'
     p[0] = [p[2], p[1], p[3]]
 
 def p_error(p):
-    raise TypeError("Syntax error at '%s'" % p.value)
+    raise TypeError('syntax error at "%s"' % p.value)
 
 ply.yacc.yacc()
 
@@ -129,23 +129,24 @@ def convert(l):
 # Page
 class Search(tornado.web.RequestHandler):
     def get(self):
-        loader = tornado.template.Loader("templates/")
+        loader = tornado.template.Loader('templates/')
         
-        conn = sqlite3.connect("db.sqlite")
+        conn = sqlite3.connect('db.sqlite')
         cur = conn.cursor()
         
         # parse the query
-        parsed = ply.yacc.parse(self.get_argument('search', ''))
-        ((query, args), typeofdata) = convert(parsed)
-        
-        # execute the query
-        print query
-        print args
-        cur.execute(query, *(args,))
-        results = cur.fetchall()
-        
-        cur.close()
-
-        self.write(loader.load('search.html').generate(results=results,
-                                                       typeofdata=typeofdata))
+        try:
+            parsed = ply.yacc.parse(self.get_argument('search', ''))
+            ((query, args), typeofdata) = convert(parsed)
+            
+            # execute the query
+            cur.execute(query, *(args,))
+            results = cur.fetchall()
+            
+            cur.close()
+            
+            self.write(loader.load('search.html').generate(results=results,
+                                                           typeofdata=typeofdata))
+        except TypeError as (err,):
+            self.write(loader.load('error.html').generate(message='Your query was incorrect: %s' % err))
 

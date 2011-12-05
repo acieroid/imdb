@@ -56,6 +56,6 @@ class Movie(tornado.web.RequestHandler):
                                                           languages=languages,
                                                           genres=genres))
         else:
-            self.write(loader.load('not_found.html').generate(message='Movie \'' +
-                                                              movie_id +
-                                                              '\' not found'))
+            self.write(loader.load('error.html').generate(message='Movie \'' +
+                                                          movie_id +
+                                                          '\' not found'))
