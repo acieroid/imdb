@@ -82,6 +82,30 @@ sub import_movies {
     print "It took ", time() - $start, " seconds\n";
 }
 
+sub import_ratings {
+    my ($id, $note);
+    my $sth = $dbh->prepare("update Work set Note = ? where ID = ?");
+    my $progress = Term::ProgressBar->new({name => "Importing ratings",
+                                           count => int(`wc -l ratings.list`)});
+    my $start = time();
+
+    open(FILE, "<", "ratings.list") or die $!;
+
+    while (<FILE>) {
+        $progress->update();
+        if (m/^      [0-9\.]+ [0-9]+  ([0-9\.]+) (.+)$/) {
+            $note = $1;
+            $id = $2;
+            if (valid_year(year($id))) {
+                $sth->execute($note, $id);
+            }
+        }
+    }
+    $dbh->commit();
+    close(FILE);
+    print "It took ", time() - $start, " seconds\n";
+}
+
 sub import_countries {
     my ($id, $year, $country);
     my $sth = $dbh->prepare("insert into Country (ID, Country) values (?, ?)");
@@ -350,19 +374,19 @@ sub quit {
 
 my @choices = ( "Create the tables",
                 "Import everything", "Import movies.list",
-                "Import countries.list", "Import languages.list",
-                "Import genres.list", "Import directors.list",
-                "Import writers.list", "Import actors.list",
-                "Import actresses.list", "Clean the database",
-                "Quit",
+                "Import ratings.list", "Import countries.list",
+                "Import languages.list", "Import genres.list",
+                "Import directors.list", "Import writers.list",
+                "Import actors.list", "Import actresses.list",
+                "Clean the database", "Quit",
     );
 my @functions = ( \&create_tables,
                   \&import_everything, \&import_movies,
-                  \&import_countries, \&import_languages,
-                  \&import_genres, \&import_directors,
-                  \&import_writers, \&import_actors_male,
-                  \&import_actors_female, \&clean_db,
-                  \&quit,
+                  \&import_ratings, \&import_countries,
+                  \&import_languages, \&import_genres,
+                  \&import_directors, \&import_writers,
+                  \&import_actors_male, \&import_actors_female,
+                  \&clean_db, \&quit,
     );
 my $max_choice = @choices;
 my $input;
