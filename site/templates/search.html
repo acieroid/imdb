@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+Search
+{% end %}
+
+{% block body %}
+Your query searched among {{ escape(typeofdata.lower()) }}<br/>
+The results are:
+<ul>
+  {% if typeofdata == 'Movie' %}
+    {% for (ID,) in results %}
+      <li><a href="/movie/{{ escape(ID) }}">{{ escape(ID) }}</a></li>
+    {% end %}
+  {% elif typeofdata == 'Serie' %}
+    {% for (ID,) in results %}
+      <li><a href="/serie/{{ escape(ID) }}">{{ escape(ID) }}</a></li>
+    {% end %}
+  {% elif typeofdata == 'Person' %}
+    {% for (fname, lname, num) in results %}
+      <li><a href="/person/{{ escape(fname) }}/{{ escape(lname) }}/{{ escape(num) }}">
+          {{ escape(fname) }}, {{ escape(lname) }} ({{escape(num)}})</li>
+    {% end %}
+  {% end %}
+</ul>
+{% end %}

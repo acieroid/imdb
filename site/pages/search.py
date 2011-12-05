@@ -111,6 +111,7 @@ def convert(l):
 #                            l[1] + ' where ' + l[1] + '.ID = W.ID) ')
         else:
             return ('', [])
+    # TODO: distinguish serie from episode
     if satisfies(l, lambda x: (x == 'EndYear' or
                                x == 'EpisodeNum' or
                                x == 'EpisodeTitle')):
@@ -138,7 +139,9 @@ class Search(tornado.web.RequestHandler):
         ((query, args), typeofdata) = convert(parsed)
         
         # execute the query
-        cur.execute(query, *args)
+        print query
+        print args
+        cur.execute(query, *(args,))
         results = cur.fetchall()
         
         cur.close()
