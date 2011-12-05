@@ -25,11 +25,9 @@ t_OPERATOR = r'(and|or)'
 t_COMPARATOR = r'(>=|<=|<|>|==)'
 t_IDENTIFIER = r'[A-Z][a-zA-Z_]+'
 def t_VALUE(t):
-    r'("[^"]+"|[0-9]+)'
+    r'("[^"]+"|[0-9\.]+)'
     if t.value[0] == '"':
         t.value = t.value[1:-1]
-    else:
-        t.value = int(t.value)
     return t
 t_LPAREN = '\('
 t_RPAREN = '\)'
@@ -121,7 +119,7 @@ def convert(l):
                 'Serie')
     elif satisfies(l, lambda x: (x == 'FirstName' or
                                  x == 'LastName')):
-        if satisfies(l, lambda x: (x != 'FirstName' or x != 'LastName')):
+        if satisfies(l, lambda x: (x != 'FirstName' and x != 'LastName')):
             raise TypeError('Person can only have FirstName and LastName')
         return (combine(('select FirstName, LastName, Num from Person where ',
                         []), '', helper(l)),
