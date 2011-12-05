@@ -20,7 +20,7 @@ sub valid_year {
     my $min_year = 2010; # 2000 in the assignment
     my $max_year = 2010;
     return ($_[0] >= $min_year and $_[0] <= $max_year);
-}        
+}
 
 sub import_movies {
     my ($id, $serie_id, $date, $year, $end_year, $title, $epi_title, $season, $epi_number);
@@ -32,7 +32,7 @@ sub import_movies {
     my $progress = Term::ProgressBar->new({name => "Importing movies",
                                            count => int(`wc -l movies.list`)});
     my $start = time();
-    
+
     open(FILE, '<', "movies.list") or die $!;
 
     while (<FILE>) {
@@ -93,7 +93,7 @@ sub import_ratings {
 
     while (<FILE>) {
         $progress->update();
-        if (m/^      [0-9\.]+ [0-9]+  ([0-9\.]+) (.+)$/) {
+        if (m/^\s+[0-9\.]+\s+[0-9]+\s+([0-9\.]+)\s+(.+)$/) {
             $note = $1;
             $id = $2;
             if (valid_year(year($id))) {

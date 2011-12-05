@@ -48,7 +48,7 @@ class Movie(tornado.web.RequestHandler):
           
             cur.close()
           
-            self.write(loader.load('movie.html').generate(movie=movie, 
+            self.write(loader.load('movie.html').generate(movie=movie,
                                                           actors=actors,
                                                           directors=directors,
                                                           writers=writers,

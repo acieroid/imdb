@@ -17,6 +17,10 @@ Your query searched among {{ escape(typeofdata.lower()) }}s.<br/>
       {% for (ID,) in results %}
         <li><a href="/serie/{{ escape(ID) }}">{{ escape(ID) }}</a></li>
       {% end %}
+    {% elif typeofdata == 'Episode' %}
+      {% for (ID,) in results %}
+        <li><a href="/episode/{{ escape(ID) }}">{{ escape(ID) }}</a></li>
+      {% end %}
     {% elif typeofdata == 'Person' %}
       {% for (fname, lname, num) in results %}
         <li><a href="/person/{{ escape(fname) }}/{{ escape(lname) }}/{{ escape(num) }}">
