@@ -2,6 +2,9 @@ import tornado.ioloop
 import tornado.web
 import tornado.template
 import sqlite3
+import urllib
+import urllib2
+import json
 
 class Movie(tornado.web.RequestHandler):
     def get(self, movie_id):
@@ -47,6 +50,11 @@ class Movie(tornado.web.RequestHandler):
             genres = map(lambda x: x[0], cur.fetchall())
           
             cur.close()
+            
+            # fetch the cover
+            response = urllib2.urlopen('http://www.imdbapi.com/?i=&t=' +
+                                       urllib.quote_plus(movie[0]))
+            poster = json.loads(response.read())['Poster']
           
             self.write(loader.load('movie.html').generate(movie=movie,
                                                           actors=actors,
@@ -54,7 +62,8 @@ class Movie(tornado.web.RequestHandler):
                                                           writers=writers,
                                                           countries=countries,
                                                           languages=languages,
-                                                          genres=genres))
+                                                          genres=genres,
+                                                          poster=poster))
         else:
             self.write(loader.load('error.html').generate(message='Movie \'' +
                                                           movie_id +

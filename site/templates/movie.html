@@ -8,6 +8,12 @@ Movie: {{ title }} ({{ year }})
 {% block body %}
 {% set (title, year, note) = movie %}
     <h1>{{ title }} ({{ year }})</h1>
+
+    {% if poster != 'N/A' %}
+    <h3>Poster</h3>
+    <img src="{{ poster }}" alt="Film poster"/>
+    {% end %}
+
     <h3>Rating</h3> 
       {% if note %} {{ note }}
       {% else %} -
