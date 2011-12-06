@@ -9,6 +9,7 @@ application = tornado.web.Application([
     (r'/', pages.Main),
     (r'/search', pages.Search),
     (r'/movie/(.*)', pages.Movie),
+    (r'/poster/(.+)/(.+)', pages.Poster),
 ])
 
 if __name__ == '__main__':

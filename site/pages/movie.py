@@ -51,19 +51,13 @@ class Movie(tornado.web.RequestHandler):
           
             cur.close()
             
-            # fetch the cover
-            response = urllib2.urlopen('http://www.imdbapi.com/?i=&t=' +
-                                       urllib.quote_plus(movie[0]))
-            poster = json.loads(response.read())['Poster']
-          
             self.write(loader.load('movie.html').generate(movie=movie,
                                                           actors=actors,
                                                           directors=directors,
                                                           writers=writers,
                                                           countries=countries,
                                                           languages=languages,
-                                                          genres=genres,
-                                                          poster=poster))
+                                                          genres=genres)
         else:
             self.write(loader.load('error.html').generate(message='Movie \'' +
                                                           movie_id +

@@ -11,7 +11,7 @@ Movie: {{ title }} ({{ year }})
 
     {% if poster != 'N/A' %}
     <h3>Poster</h3>
-    <img src="{{ poster }}" alt="Film poster"/>
+    <img src="/poster/{{ title }}/{{ year }}/" alt="Film poster"/>
     {% end %}
 
     <h3>Rating</h3> 
