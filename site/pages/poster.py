@@ -11,9 +11,12 @@ class Poster(tornado.web.RequestHandler):
         response = urllib2.urlopen('http://www.imdbapi.com/?i=&t=' +
                                    urllib.quote_plus(title) +
                                    '&y=' + urllib.quote_plus(year))
-        poster = json.loads(response.read())['Poster']
-        if poster != 'N/A':
-            self.redirect(poster)
-        else:
+        table=json.loads(response.read())
+        if table['Response'] == 'True':
+            poster = table['Poster']
+            if poster != 'N/A':
+                self.redirect(poster)
+            else:
+                raise tornado.web.HTTPError(404)
+	else:
             raise tornado.web.HTTPError(404)
-

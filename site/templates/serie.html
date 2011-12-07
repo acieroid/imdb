@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
 {% block title %}
-{% set (title, year, note) = movie %}
-Movie: {{ title }} ({{ year }})
+{% set (title, year, note, endyear) = serie %}
+Serie: {{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})
 {% end %}
 
 {% block body %}
-{% set (title, year, note) = movie %}
-    <h1>{{ title }} ({{ year }})</h1>
+{% set (title, year, note, endyear) = serie %}
+    <h1>{{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})</h1>
 
     <h3>Poster</h3>
-    <img src="/poster/{{ title }}/{{ year }}/" alt="Film poster"/>
+    <img src="/poster/{{ title }}/{{ year }}/" alt="Serie poster"/>
 
     <h3>Rating</h3> 
       {% if note %} {{ note }}
