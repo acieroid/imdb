@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% set (fname, lname, num, gender) = person %}
+{{ fname }} {{ lname }}
+{% end %}
+
+{% block body %}
+{% set (fname, lname, num, gender) = person %}
+    <h1>{{ fname }} {{ lname }}</h1>
+
+    <h3>Roles</h3>
+    {% if roles %}
+      <ul>
+        {% for (ID, role) in roles %}
+        <li>{{ role }} in <a href="/movie/{{ ID }}">{{ ID }}</a></li>
+        {% end %}
+      </ul>
+    {% else %}
+      Never played in anything
+    {% end %}
+
+    <h3>Directed</h3>
+    {% if directed %}
+      <ul>
+        {% for (ID) in directed %}
+        <li><a href="/movie/{{ ID }}">{{ ID }}</a></li>
+        {% end %}
+      </ul>
+    {% else %}
+      Never directed anything
+    {% end %}
+
+    <h3>Written</h3>
+    {% if written %}
+      <ul>
+        {% for (ID) in written %}
+        <li><a href="/movie/{{ ID }}">{{ ID }}</a></li>
+        {% end %}
+      </ul>
+    {% else %}
+      Never written anything
+    {% end %}
+{% end %}

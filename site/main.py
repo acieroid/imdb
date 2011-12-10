@@ -11,6 +11,7 @@ application = tornado.web.Application([
     (r'/movie/(.*)', pages.Movie),
     (r'/serie/(.*)', pages.Serie),
     (r'/poster/(.+)/(.+)', pages.Poster),
+    (r'/person/(.+)/(.+)/(.*)', pages.Person),
 ])
 
 if __name__ == '__main__':
