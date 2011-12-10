@@ -58,7 +58,7 @@ sub import_movies {
                         $epi_serie_sth->execute($serie_id, $id) or die $epi_sth->errstr;
                     }
                 }
-                elsif ($id =~ /\"(.+)\" \(([0-9]{4})[^\)]*\)$/) {
+                elsif ($id =~ /"(.+)" \(([0-9]{4})[^\)]*\)$/) {
                     $title = $1;
                     $date = $2;
                     if ($end_year eq "????" or $end_year eq "") {
@@ -345,10 +345,17 @@ sub import_actors_female {
 
 sub clean_db {
     print "Cleaning the database\n";
+    # remove actors/writers/directors entries where the ID of the work
+    # is not in the database
+    $dbh->do("delete from Actor where not exists (select ID from Work where Work.ID = Actor.ID");
+    $dbh->do("delete from Director where not exists (select ID from Work where Work.ID = Director.ID");
+    $dbh->do("delete from Writer where not exists (select ID from Work where Work.ID = Writer.ID");
     # remove persons who don't have played/directed/wrote something
-    # from the 2000's (in case foreign constraints aren't active, like
+    # from the database (in case foreign constraints aren't active, like
     # in sqlite)
     $dbh->do("delete from Person where not exists (select A.FirstName from Actor A where A.FirstName = Person.FirstName and A.LastName = Person.LastName and A.Num = Person.Num union select W.FirstName from Writer W where W.FirstName = Person.FirstName and W.LastName = Person.LastName and W.Num = Person.Num union select D.FirstName from Director D where D.FirstName = Person.FirstName and D.LastName = Person.LastName and D.Num = Person.Num)");
+
+    $dbh->commit();
 }
 
 sub import_everything {
