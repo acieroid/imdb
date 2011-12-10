@@ -6,7 +6,6 @@ Serie: {{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})
 {% end %}
 
 {% block body %}
-{% import urllib %}
 {% set (title, year, note, endyear) = serie %}
     <h1>{{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})</h1>
 
@@ -34,10 +33,10 @@ Serie: {{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})
             {% if saisonP != 0 %}
         </ul>
             {% end %}
-        <h4>Saison {{ saison }}</h4>
+        <h4>Season {{ saison }}</h4>
         <ul>
         {% end %}
-            <li><a href="/episode/{{ urllib.quote_plus(ID) }}">
+            <li><a href="/episode/{{ ID }}">
                 {{ numE }}. {{ titre }}</a></li>
         {% set (saisonP) = saison %}
     {% end %}
