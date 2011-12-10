@@ -6,6 +6,7 @@
 {% end %}
 
 {% block body %}
+{% import utils %}
 {% set (fname, lname, num, gender) = person %}
     <h1>{{ fname }} {{ lname }}</h1>
 
@@ -13,7 +14,7 @@
     {% if roles %}
       <ul>
         {% for (ID, role) in roles %}
-        <li>{{ role }} in <a href="/movie/{{ ID }}">{{ ID }}</a></li>
+          <li>{{ role }} in {% raw utils.work_link(ID) %}</li>
         {% end %}
       </ul>
     {% else %}
@@ -24,7 +25,7 @@
     {% if directed %}
       <ul>
         {% for (ID) in directed %}
-        <li><a href="/movie/{{ ID }}">{{ ID }}</a></li>
+        <li>{% raw utils.work_link(ID) %}</li>
         {% end %}
       </ul>
     {% else %}
@@ -35,7 +36,7 @@
     {% if written %}
       <ul>
         {% for (ID) in written %}
-        <li><a href="/movie/{{ ID }}">{{ ID }}</a></li>
+        <li>{% raw utils.work_link(ID) %}</li>
         {% end %}
       </ul>
     {% else %}
