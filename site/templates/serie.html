@@ -6,6 +6,7 @@ Serie: {{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})
 {% end %}
 
 {% block body %}
+{% import urllib %}
 {% set (title, year, note, endyear) = serie %}
     <h1>{{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})</h1>
 
@@ -25,6 +26,24 @@ Serie: {{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})
        No genres
     {% end %}
 
+    {% if episodes %}
+    <h3>Episodes<h3>
+    {% set (saisonP) = 0 %}
+    {% for (ID, saison, numE, titre) in episodes %}
+        {% if saison != saisonP %}
+            {% if saisonP != 0 %}
+        </ul>
+            {% end %}
+        <h4>Saison {{ saison }}</h4>
+        <ul>
+        {% end %}
+            <li><a href="/episode/{{ urllib.quote_plus(ID) }}">
+                {{ numE }}. {{ titre }}</a></li>
+        {% set (saisonP) = saison %}
+    {% end %}
+    </ul>
+    {% end %}
+    
     <h3>Countries</h3>
     {% if countries %}
       {{ ', '.join(countries) }}

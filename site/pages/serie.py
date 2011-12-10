@@ -48,7 +48,12 @@ class Serie(tornado.web.RequestHandler):
             cur.execute('select Genre from Genre where ID = ?',
                         (serie_id,))
             genres = map(lambda x: x[0], cur.fetchall())
-          
+            
+            # fetch the episodes
+            cur.execute('select ID, Season, EpisodeNum, EpisodeTitle from Episode, SerieEpisode where SerieEpisode.SID=? and Episode.ID=SerieEpisode.EID order by Season, EpisodeNum', (serie_id,))
+                        
+            episodes = cur.fetchall()
+
             cur.close()
             
             self.write(loader.load('serie.html').generate(serie=serie,
@@ -57,7 +62,8 @@ class Serie(tornado.web.RequestHandler):
                                                           writers=writers,
                                                           countries=countries,
                                                           languages=languages,
-                                                          genres=genres))
+                                                          genres=genres,
+                                                          episodes=episodes))
         else:
             self.write(loader.load('error.html').generate(message='Serie \'' +
                                                           serie_id +
