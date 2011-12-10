@@ -4,4 +4,4 @@ from movie import Movie
 from serie import Serie
 from poster import Poster
 from person import Person
-from admin import AdminLogin, AdminLogout, AdminPanel
+from admin import *

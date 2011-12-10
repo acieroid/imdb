@@ -30,6 +30,8 @@ class AdminLogin(AdminPage):
                     (mail, hashed_password))
         auth = cur.fetchone()
 
+        cur.close()
+
         if auth:
             self.set_secure_cookie('mail', mail)
             self.redirect(self.get_argument('next', '/admin'))
@@ -49,6 +51,31 @@ class AdminPanel(AdminPage):
         user = self.get_current_user()
         self.write(loader.load('admin.html').generate(mail=user))
 
+class AdminAdd(AdminPage):
+    @tornado.web.authenticated
+    def post(self):
+        loader = tornado.template.Loader('templates/')
+        mail = self.get_argument('mail', '')
+        password = self.get_argument('password', '')
+        hashed_password = hashlib.sha256(mail+password).hexdigest()
+
+        conn = sqlite3.connect('db.sqlite')
+        cur = conn.cursor()
+
+        # check if the new admin already exists
+        cur.execute('select 1 from Admin where Mail = ?', (mail,))
+        if cur.fetchone():
+            cur.close()
+            self.write(loader.load('error.html').generate(message='This admin already exists'))
+        else:
+            cur.execute('insert into Admin (Mail, Pass) values (?, ?)',
+                        (mail, hashed_password))
+            conn.commit()
+            cur.close()
+            # TODO: check that the request is successful
+            self.write(loader.load('success.html').generate(message='Admin added',
+                                                            next='/admin'))
+
 class AdminDelete(AdminPage):
     @tornado.web.authenticated
     def post(self):
@@ -63,12 +90,14 @@ class AdminDelete(AdminPage):
             self.write(loader.load('error.html').generate(message='You cannot delete yourself'))
         else:
             # check that the admin exists
-            cur.execute('select * from Admin where Mail = ?', (to_delete,))
+            cur.execute('select 1 from Admin where Mail = ?', (to_delete,))
             if cur.fetchone():
                 # it exists, so we delete it
                 cur.execute('delete from Admin where Mail = ?', (to_delete,))
+                conn.commit()
+                cur.close()
                 self.write(loader.load('success.html').generate(message='Admin deleted',
                                                                 next='/admin'))
             else:
+                cur.close()
                 self.write(loader.load('error.html').generate(message='Admin with mail %s do not exists' % to_delete))
-                
