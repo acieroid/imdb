@@ -15,6 +15,7 @@ application = tornado.web.Application([
     (r'/admin', pages.AdminPanel),
     (r'/admin/login', pages.AdminLogin),
     (r'/admin/logout', pages.AdminLogout),
+    (r'/admin/delete', pages.AdminDelete),
 ], cookie_secret='N53gLGkySeCvX5AjgUgmtAez7L8JhUP2hb+MYgizGWo=')
 
 if __name__ == '__main__':
