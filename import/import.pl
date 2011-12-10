@@ -347,9 +347,9 @@ sub clean_db {
     print "Cleaning the database\n";
     # remove actors/writers/directors entries where the ID of the work
     # is not in the database
-    $dbh->do("delete from Actor where not exists (select ID from Work where Work.ID = Actor.ID");
-    $dbh->do("delete from Director where not exists (select ID from Work where Work.ID = Director.ID");
-    $dbh->do("delete from Writer where not exists (select ID from Work where Work.ID = Writer.ID");
+    $dbh->do("delete from Actor where not exists (select ID from Work where Work.ID = Actor.ID)");
+    $dbh->do("delete from Director where not exists (select ID from Work where Work.ID = Director.ID)");
+    $dbh->do("delete from Writer where not exists (select ID from Work where Work.ID = Writer.ID)");
     # remove persons who don't have played/directed/wrote something
     # from the database (in case foreign constraints aren't active, like
     # in sqlite)

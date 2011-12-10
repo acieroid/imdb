@@ -27,7 +27,7 @@ They need to be gunzipped and placed in the current working directory.
 ** Running the script
 First you need to create the SQLite database. To do so, run something
 like `sqlite3 db.sqlite '.read /path/to/create.sql'` (create.sql is in
-`../sql`). Then, execute the `import.pl` script.
+the same directory as this file). Then, execute the `import.pl` script.
 
 Note that the DBMS might complains (a lot) about failed
 constraints. This is because the data contained in the data file is
