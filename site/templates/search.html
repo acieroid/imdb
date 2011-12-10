@@ -5,21 +5,22 @@ Search
 {% end %}
 
 {% block body %}
+{% import utils %}
 Your query searched among {{ typeofdata.lower() }}s.<br/>
 {% if results %}
   The results are:
   <ul>
     {% if typeofdata == 'Movie' %}
       {% for (ID,) in results %}
-        <li><a href="/movie/{{ ID }}">{{ ID }}</a></li>
+        <li>{% raw utils.work_link(ID) %}</li>
       {% end %}
     {% elif typeofdata == 'Serie' %}
       {% for (ID,) in results %}
-        <li><a href="/serie/{{ ID }}">{{ ID }}</a></li>
+        <li>{% raw utils.work_link(ID) %}</li>
       {% end %}
     {% elif typeofdata == 'Episode' %}
       {% for (ID,) in results %}
-        <li><a href="/episode/{{ ID }}">{{ ID }}</a></li>
+        <li>{% raw utils.work_link(ID) %}</li>
       {% end %}
     {% elif typeofdata == 'Person' %}
       {% for (fname, lname, num) in results %}
