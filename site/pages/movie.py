@@ -2,9 +2,6 @@ import tornado.ioloop
 import tornado.web
 import tornado.template
 import sqlite3
-import urllib
-import urllib2
-import json
 
 class Movie(tornado.web.RequestHandler):
     def get(self, movie_id):
