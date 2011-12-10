@@ -4,5 +4,5 @@ import tornado.template
 
 class Main(tornado.web.RequestHandler):
     def get(self):
-        self.write('TODO')
-
+        loader = tornado.template.Loader('templates/')
+        return self.write(loader.load('base.html').generate())
