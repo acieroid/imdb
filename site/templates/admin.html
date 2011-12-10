@@ -6,7 +6,7 @@ Admin panel
 
 {% block body %}
 <h1>Admin panel</h1>
-You are connected as {{ mail }}
+You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
 <h3>Add an admin<h3>
 <form action="/admin/add" method="post">

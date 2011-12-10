@@ -12,6 +12,7 @@ application = tornado.web.Application([
     (r'/serie/(.*)', pages.Serie),
     (r'/poster/(.+)/(.+)', pages.Poster),
     (r'/person/(.+)/(.+)/(.*)', pages.Person),
+    (r'/admin', pages.AdminPanel),
     (r'/admin/login', pages.AdminLogin),
     (r'/admin/logout', pages.AdminLogout),
 ], cookie_secret='N53gLGkySeCvX5AjgUgmtAez7L8JhUP2hb+MYgizGWo=')

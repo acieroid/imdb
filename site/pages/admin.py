@@ -41,3 +41,12 @@ class AdminLogout(AdminPage):
         loader = tornado.template.Loader('templates/')
         self.clear_cookie('mail')
         self.write(loader.load('login.html').generate())
+
+class AdminPanel(AdminPage):
+    def get(self):
+        loader = tornado.template.Loader('templates/')
+        user = self.get_current_user()
+        if user:
+            self.write(loader.load('admin.html').generate(mail=user))
+        else:
+            self.redirect('/admin/login')
