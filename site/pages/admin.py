@@ -140,8 +140,52 @@ class AdminAddWork(BasePage):
 
 class AdminAddPerson(BasePage):
     @tornado.web.authenticated
-    def post(self):
-        self.write('TODO')
+    def post(self, t):
+        loader = tornado.template.Loader('templates/')
+
+        conn = sqlite3.connect('db.sqlite')
+        cur = conn.cursor()
+
+        ID = self.get_argument('id', '')
+        role = self.get_argument('role', '')
+        fname = self.get_argument('fname', '')
+        lname = self.get_argument('lname', '')
+        num = self.get_argument('num', '')
+        gender = self.get_argument('gender', '')
+
+        cond = 'FirstName = ? and LastName = ? and Num = ?'
+        pID = (fname, lname, num)
+
+        # check if work id is valid
+        cur.execute('select 1 from Work where ID = ?', (ID,))
+        if not cur.fetchone():
+            self.error('There is no such work: %s' % ID)
+            return
+
+        # check if person already exists
+        cur.execute('select 1 from Person where %s' % cond, pID)
+        if not cur.fetchone():
+            # person does not exists, add it
+            cur.execute('insert into Person (FirstName, LastName, Num, Gender) values (?, ?, ?, ?)',
+                        (fname, lname, num, gender))
+
+        # add its role
+        if t == 'director':
+            cur.execute('insert into Director (FirstName, LastName, Num, ID) values (?, ?, ?, ?)',
+                        (fname, lname, num, ID))
+        elif t == 'writer':
+            cur.execute('insert into Writer (FirstName, LastName, Num, ID) values (?, ?, ?, ?)',
+                        (fname, lname, num, ID))
+        elif t == 'actor':
+            if role == '':
+                self.error('Please specify a role')
+                return
+            cur.execute('insert into Actor (FirstName, LastName, Num, ID, Role) values (?, ?, ?, ?, ?)',
+                        (fname, lname, num, ID, role))
+
+        conn.commit()
+        cur.close()
+        self.success('Person added')
 
 class AdminDelete(BasePage):
     @tornado.web.authenticated

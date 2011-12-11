@@ -29,7 +29,7 @@ class Movie(BasePage):
             directors = cur.fetchall()
           
             # fetch the writers
-            cur.execute('select FirstName, LastName, Num from Director where ID = ?',
+            cur.execute('select FirstName, LastName, Num from Writer where ID = ?',
                         (movie_id,))
             writers = cur.fetchall()
           

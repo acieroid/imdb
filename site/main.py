@@ -17,11 +17,11 @@ application = tornado.web.Application([
     (r'/admin/logout', pages.AdminLogout),
     (r'/admin/add', pages.AdminAdd),
     (r'/admin/add/(movie|serie|episode)', pages.AdminAddWork),
-    (r'/admin/add/(director|writer|director)', pages.AdminAddPerson),
+    (r'/admin/add/(director|writer|actor)', pages.AdminAddPerson),
     (r'/admin/delete', pages.AdminDelete),
     (r'/admin/delete/work/(.*)', pages.AdminDeleteWork),
     (r'/admin/delete/person/(.+)/(.+)/(.*)', pages.AdminDeletePerson),
-    (r'/admin/delete/(director|writer|actor)/(.+)/(.+)/(.*)/(.+)/(.*)', pages.AdminDeletePersonType),
+    (r'/admin/delete/(director|writer|actor)/(.+)/(.+)/(.*)/(.+)/?(.*)', pages.AdminDeletePersonType),
 ], cookie_secret='N53gLGkySeCvX5AjgUgmtAez7L8JhUP2hb+MYgizGWo=')
 
 if __name__ == '__main__':

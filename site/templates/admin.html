@@ -83,5 +83,69 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
   <input type="submit" value="Add" />
 </form>
 
+<h3>Add a director</h3>
+<form action="/admin/add/director" method="post">
+  <label control="id">Work ID: </label>
+  <input type="text" name="id" id="id" /><br />
+
+  <label control="fname">First name: </label>
+  <input type="text" name="fname" id="fname" /><br />
+
+  <label control="lname">Last name: </label>
+  <input type="text" name="lname" id="lname" /><br />
+
+  <label control="num">Number: </label>
+  <input type="text" name="num" id="num" /><br />
+
+  <label control="gender">Gender: </label>
+  <input type="text" name="gender" id="gender" /> (leave blank if person already exists)<br />
+
+  <input type="submit" value="Add" />
+</form>
+
+<h3>Add a writer</h3>
+<form action="/admin/add/writer" method="post">
+  <label control="id">Work ID: </label>
+  <input type="text" name="id" id="id" /><br />
+
+  <label control="fname">First name: </label>
+  <input type="text" name="fname" id="fname" /><br />
+
+  <label control="lname">Last name: </label>
+  <input type="text" name="lname" id="lname" /><br />
+
+  <label control="num">Number: </label>
+  <input type="text" name="num" id="num" /><br />
+
+  <label control="gender">Gender: </label>
+  <input type="text" name="gender" id="gender" /> (leave blank if person already exists)<br />
+
+  <input type="submit" value="Add" />
+</form>
+
+<h3>Add an actor</h3>
+<form action="/admin/add/actor" method="post">
+  <label control="id">Work ID: </label>
+  <input type="text" name="id" id="id" /><br />
+
+  <label control="role">Role: </label>
+  <input type="text" name="role" id="role" /><br />
+
+  <label control="fname">First name: </label>
+  <input type="text" name="fname" id="fname" /><br />
+
+  <label control="lname">Last name: </label>
+  <input type="text" name="lname" id="lname" /><br />
+
+  <label control="num">Number: </label>
+  <input type="text" name="num" id="num" /><br />
+
+  <label control="gender">Gender: </label>
+  <input type="text" name="gender" id="gender" /> (leave blank if person already exists)<br />
+
+  <input type="submit" value="Add" />
+</form>
+
+
 {% end %}
 
