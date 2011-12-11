@@ -1,10 +1,10 @@
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from pages import AdminPage
 import sqlite3
+from pages import BasePage
 
-class Serie(AdminPage):
+class Serie(BasePage):
     def get(self, serie_id):
         loader = tornado.template.Loader('templates/')
         admin = self.get_current_user()

@@ -5,6 +5,7 @@ import sqlite3
 import ply.lex
 import ply.yacc
 import re
+from pages import BasePage
 
 # Query language
 tokens = (
@@ -129,7 +130,7 @@ def convert(l):
                 'Movie')
 
 # Page
-class Search(tornado.web.RequestHandler):
+class Search(BasePage):
     def get(self):
         loader = tornado.template.Loader('templates/')
         
@@ -150,5 +151,5 @@ class Search(tornado.web.RequestHandler):
             self.write(loader.load('search.html').generate(results=results,
                                                            typeofdata=typeofdata))
         except TypeError as (err,):
-            self.write(loader.load('error.html').generate(message='Your query was incorrect: %s' % err))
+            self.error('Your query was incorrect: %s' % err)
 

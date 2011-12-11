@@ -4,15 +4,9 @@ import tornado.template
 import sqlite3
 import hashlib
 import utils
+from pages import BasePage
 
-class AdminPage(tornado.web.RequestHandler):
-    def get_login_url(self):
-        return '/admin/login'
-    def get_current_user(self):
-        mail = self.get_secure_cookie('mail')
-        return mail
-
-class AdminLogin(AdminPage):
+class AdminLogin(BasePage):
     def get(self):
         loader = tornado.template.Loader('templates/')
         self.write(loader.load('login.html').generate())
@@ -39,20 +33,20 @@ class AdminLogin(AdminPage):
         else:
             self.write(loader.load('error.html').generate(message='Wrong mail or password'))
 
-class AdminLogout(AdminPage):
+class AdminLogout(BasePage):
     def get(self):
         loader = tornado.template.Loader('templates/')
         self.clear_cookie('mail')
         self.write(loader.load('login.html').generate())
 
-class AdminPanel(AdminPage):
+class AdminPanel(BasePage):
     @tornado.web.authenticated
     def get(self):
         loader = tornado.template.Loader('templates/')
         user = self.get_current_user()
         self.write(loader.load('admin.html').generate(mail=user))
 
-class AdminAdd(AdminPage):
+class AdminAdd(BasePage):
     @tornado.web.authenticated
     def post(self):
         loader = tornado.template.Loader('templates/')
@@ -77,7 +71,17 @@ class AdminAdd(AdminPage):
             self.write(loader.load('success.html').generate(message='Admin added',
                                                             next='/admin'))
 
-class AdminDelete(AdminPage):
+class AdminAddWork(BasePage):
+    @tornado.web.authenticated
+    def post(self):
+        self.write('TODO')
+
+class AdminAddPerson(BasePage):
+    @tornado.web.authenticated
+    def post(self):
+        self.write('TODO')
+
+class AdminDelete(BasePage):
     @tornado.web.authenticated
     def post(self):
         loader = tornado.template.Loader('templates/')
@@ -103,7 +107,7 @@ class AdminDelete(AdminPage):
                 cur.close()
                 self.write(loader.load('error.html').generate(message='Admin with mail %s do not exists' % to_delete))
 
-class AdminDeleteWork(AdminPage):
+class AdminDeleteWork(BasePage):
     @tornado.web.authenticated
     def get(self, ID):
         loader = tornado.template.Loader('templates/')
@@ -135,7 +139,7 @@ class AdminDeleteWork(AdminPage):
             cur.close()
             self.write(loader.load('error.html').generate(message='Nothing exists with the ID %s' % ID))
 
-class AdminDeletePerson(AdminPage):
+class AdminDeletePerson(BasePage):
     @tornado.web.authenticated
     def get(self, fname, lname, num):
         loader = tornado.template.Loader('templates/')
@@ -162,7 +166,7 @@ class AdminDeletePerson(AdminPage):
             cur.close()
             self.write(loader.load('error.html').generate(message='%s %s (%s) do not exists' % ID))
 
-class AdminDeletePersonType(AdminPage):
+class AdminDeletePersonType(BasePage):
     @tornado.web.authenticated
     def get(self, t, fname, lname, num, ID, role):
         loader = tornado.template.Loader('templates/')
@@ -207,3 +211,4 @@ class AdminDeletePersonType(AdminPage):
                 self.write(loader.load('error.html').generate(message='%s %s (%s) do not exists' % (fname, lname, num)))
         else:
             self.write(loader.load('error.html').generate(message='Unknown type of person: %s' % t))
+

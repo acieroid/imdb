@@ -16,6 +16,8 @@ application = tornado.web.Application([
     (r'/admin/login', pages.AdminLogin),
     (r'/admin/logout', pages.AdminLogout),
     (r'/admin/add', pages.AdminAdd),
+    (r'/admin/add/(movie|serie|episode)', pages.AdminAddWork),
+    (r'/admin/add/(director|writer|director)', pages.AdminAddPerson),
     (r'/admin/delete', pages.AdminDelete),
     (r'/admin/delete/work/(.*)', pages.AdminDeleteWork),
     (r'/admin/delete/person/(.+)/(.+)/(.*)', pages.AdminDeletePerson),
