@@ -40,5 +40,48 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
   <input type="submit" value="Add" />
 </form>
 
+<h3>Add a serie</h3>
+<form action="/admin/add/serie" method="post">
+  <label control="title">Title: </label>
+  <input type="text" name="title" id="title" /><br />
+  
+  <label control="year">Year: </label>
+  <input type="text" name="year" id="year" /><br />
+
+  <label control="end_year">End year: </label>
+  <input type="text" name="end_year" id="end_year" /><br />
+
+  <label control="note">Note: </label>
+  <input type="text" name="note" id="note" /><br />
+
+  <input type="submit" value="Add" />
+</form>
+
+<h3>Add an episode</h3>
+<form action="/admin/add/episode" method="post">
+  <label control="title">Serie title: </label>
+  <input type="text" name="title" id="title" /><br />
+  
+  <label control="year">Serie year: </label>
+  <input type="text" name="year" id="year" /><br />
+
+  <label control="date">Episode year: </label>
+  <input type="text" name="date" id="date" /><br />
+
+  <label control="season">Season: </label>
+  <input type="text" name="season" id="season" /><br />
+
+  <label control="epi_num">Episode number: </label>
+  <input type="text" name="epi_num" id="epi_num" /><br />
+
+  <label control="epi_title">Episode title: </label>
+  <input type="text" name="epi_title" id="epi_title" /><br />
+
+  <label control="note">Episode note: </label>
+  <input type="text" name="note" id="note" /><br />
+
+  <input type="submit" value="Add" />
+</form>
+
 {% end %}
 

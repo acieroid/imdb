@@ -82,16 +82,19 @@ class AdminAddWork(BasePage):
         epi_title = self.get_argument('epi_title', '')
         try:
             year = int(self.get_argument('year', ''))
-            note = int(self.get_argument('note', ''))
-            if note < 0 or note < 10:
-                raise ValueError('Invalid note')
+            note = self.get_argument('note', '')
+            if note != '':
+                note = int(note)
+                if note < 0 or note < 10:
+                    raise ValueError('Invalid note')
+            print note
             if t == 'episode':
                 season = int(self.get_argument('season', ''))
                 epi_num = int(self.get_argument('epi_num', ''))
                 date = int(self.get_argument('date', ''))
             if t == 'serie':
-                end_year = self.get_argument('end_year', None)
-                if end_year:
+                end_year = self.get_argument('end_year', '')
+                if end_year != '':
                     end_year = int(end_year)
         except ValueError:
             self.error('Incorrect values, check the values that should be integers')
@@ -102,9 +105,17 @@ class AdminAddWork(BasePage):
         elif t == 'serie':
             ID = '"%s" (%d)' % (title, year)
         elif t == 'episode':
+            # first, we check that the serie exists
+            ID = '"%s" (%d)' % (title, year)
+            cur.execute('select 1 from Work where ID = ?', (ID,))
+            if not cur.fetchone():
+                cur.close()
+                self.error('This serie does not exists')
+                return
             ID = '"%s" (%d) {%s (#%d.%d)}' % (title, year, epi_title, season, epi_num)
         else:
             self.error('Unknown work type: %s' % t)
+            return
 
         # check if already there
         cur.execute('select 1 from Work where ID = ?', (ID,))
