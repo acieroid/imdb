@@ -49,10 +49,7 @@ class Serie(BasePage):
             genres = map(lambda x: x[0], cur.fetchall())
             
             # fetch the episodes
-            # TODO: Episode and SerieEpisode are now merged in the database schema,
-            # so the query should be this one:
-            #cur.execute('select ID, Season, EpisodeNum, EpisodeTitle from Episode where SID = ? order by Season, EpisodeNum', (serie_id,))
-            cur.execute('select ID, Season, EpisodeNum, EpisodeTitle from Episode, SerieEpisode where SerieEpisode.SID=? and Episode.ID=SerieEpisode.EID order by Season, EpisodeNum', (serie_id,))
+            cur.execute('select ID, Season, EpisodeNum, EpisodeTitle from Episode where SID = ? order by Season, EpisodeNum', (serie_id,))
                         
             episodes = cur.fetchall()
 
