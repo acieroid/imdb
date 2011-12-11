@@ -1,7 +1,8 @@
+from admin import *
 from main import Main
 from search import Search
 from movie import Movie
 from serie import Serie
-from poster import Poster
 from person import Person
-from admin import *
+from poster import Poster
+

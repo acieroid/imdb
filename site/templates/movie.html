@@ -9,6 +9,10 @@ Movie: {{ title }} ({{ year }})
 {% set (title, year, note) = movie %}
     <h1>{{ title }} ({{ year }})</h1>
 
+    {% if admin %}
+    <a href="/admin/delete/work/{{ ID }}">Delete</a><br />
+    {% end %}
+
     <h3>Poster</h3>
     <img src="/poster/{{ title }}/{{ year }}/" alt="Film poster"/>
 

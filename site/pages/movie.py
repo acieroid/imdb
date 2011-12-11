@@ -1,11 +1,13 @@
 import tornado.ioloop
 import tornado.web
 import tornado.template
+from pages import AdminPage
 import sqlite3
 
-class Movie(tornado.web.RequestHandler):
+class Movie(AdminPage):
     def get(self, movie_id):
         loader = tornado.template.Loader('templates/')
+        admin = self.get_current_user()
         
         conn = sqlite3.connect('db.sqlite')
         cur = conn.cursor()
@@ -49,12 +51,14 @@ class Movie(tornado.web.RequestHandler):
             cur.close()
             
             self.write(loader.load('movie.html').generate(movie=movie,
+                                                          ID=movie_id,
                                                           actors=actors,
                                                           directors=directors,
                                                           writers=writers,
                                                           countries=countries,
                                                           languages=languages,
-                                                          genres=genres))
+                                                          genres=genres,
+                                                          admin=admin))
         else:
             self.write(loader.load('error.html').generate(message='Movie \'' +
                                                           movie_id +

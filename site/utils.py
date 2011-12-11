@@ -34,3 +34,12 @@ def work_link(ID):
             return ('<a href="/serie/%s">%s (%s)</a>' % (escape(ID), title, year))
         else:
             return ('Invalid serie ID: %s' % escape(ID))
+
+def is_movie(ID):
+    return ID[0] != '"'
+
+def is_serie(ID):
+    return ID[0] == '"' and ID.find('{') == -1
+
+def is_episode(ID):
+    return ID[0] == '"' and ID.find('{') != -1
