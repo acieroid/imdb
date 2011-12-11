@@ -1,11 +1,13 @@
 import tornado.ioloop
 import tornado.web
 import tornado.template
+from pages import AdminPage
 import sqlite3
 
-class Serie(tornado.web.RequestHandler):
+class Serie(AdminPage):
     def get(self, serie_id):
         loader = tornado.template.Loader('templates/')
+        admin = self.get_current_user()
         
         conn = sqlite3.connect('db.sqlite')
         cur = conn.cursor()
@@ -54,13 +56,15 @@ class Serie(tornado.web.RequestHandler):
             cur.close()
             
             self.write(loader.load('serie.html').generate(serie=serie,
+                                                          ID=serie_id,
                                                           actors=actors,
                                                           directors=directors,
                                                           writers=writers,
                                                           countries=countries,
                                                           languages=languages,
                                                           genres=genres,
-                                                          episodes=episodes))
+                                                          episodes=episodes,
+                                                          admin=admin))
         else:
             self.write(loader.load('error.html').generate(message='Serie \'' +
                                                           serie_id +

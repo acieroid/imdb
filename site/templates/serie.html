@@ -9,6 +9,10 @@ Serie: {{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})
 {% set (title, year, note, endyear) = serie %}
     <h1>{{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})</h1>
 
+    {% if admin %}
+    <a href="/admin/delete/work/{{ ID }}">Delete</a>
+    {% end %}
+
     <h3>Poster</h3>
     <img src="/poster/{{ title }}/{{ year }}/" alt="Serie poster"/>
 
@@ -28,7 +32,7 @@ Serie: {{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})
     {% if episodes %}
     <h3>Episodes<h3>
     {% set (saisonP) = 0 %}
-    {% for (ID, saison, numE, titre) in episodes %}
+    {% for (epID, saison, numE, titre) in episodes %}
         {% if saison != saisonP %}
             {% if saisonP != 0 %}
         </ul>
@@ -36,7 +40,7 @@ Serie: {{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})
         <h4>Season {{ saison }}</h4>
         <ul>
         {% end %}
-            <li><a href="/episode/{{ ID }}">
+            <li><a href="/episode/{{ epID }}">
                 {{ numE }}. {{ titre }}</a></li>
         {% set (saisonP) = saison %}
     {% end %}
