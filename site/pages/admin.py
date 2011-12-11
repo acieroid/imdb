@@ -159,6 +159,7 @@ class AdminAddPerson(BasePage):
         # check if work id is valid
         cur.execute('select 1 from Work where ID = ?', (ID,))
         if not cur.fetchone():
+            cur.close()
             self.error('There is no such work: %s' % ID)
             return
 
@@ -178,6 +179,7 @@ class AdminAddPerson(BasePage):
                         (fname, lname, num, ID))
         elif t == 'actor':
             if role == '':
+                cur.close()
                 self.error('Please specify a role')
                 return
             cur.execute('insert into Actor (FirstName, LastName, Num, ID, Role) values (?, ?, ?, ?, ?)',
@@ -186,6 +188,40 @@ class AdminAddPerson(BasePage):
         conn.commit()
         cur.close()
         self.success('Person added')
+
+class AdminAddInfo(BasePage):
+    @tornado.web.authenticated
+    def post(self, t):
+        loader = tornado.template.Loader('templates/')
+
+        if t != 'genre' and t != 'country' and t != 'language':
+            self.error('Invalid info type: %s' % t)
+            return
+
+        conn = sqlite3.connect('db.sqlite')
+        cur = conn.cursor()
+
+        ID = self.get_argument('id', '')
+        info = self.get_argument(t, '')
+
+        if info == '':
+            cur.close()
+            self.error('Invalid info')
+            return
+
+        # check if work id is valid
+        cur.execute('select 1 from Work where ID = ?', (ID,))
+        if not cur.fetchone():
+            cur.close()
+            self.error('There is no such work: %s' % ID)
+            return
+
+        cur.execute('insert into %s (ID, %s) values (?, ?)' % 
+                    (t.capitalize(), t.capitalize()),
+                    (ID, info))
+        conn.commit()
+        cur.close()
+        self.success('Info added')
 
 class AdminDelete(BasePage):
     @tornado.web.authenticated

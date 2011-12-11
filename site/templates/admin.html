@@ -146,6 +146,38 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
   <input type="submit" value="Add" />
 </form>
 
+<h3>Add a genre</h3>
+<form action="/admin/add/genre" method="post">
+  <label control="id">Work ID: </label>
+  <input type="text" name="id" id="id" /><br />
+
+  <label control="genre">Genre: </label>
+  <input type="text" name="genre" id="genre" /><br />
+
+  <input type="submit" value="Add" />
+</form>
+
+<h3>Add a country</h3>
+<form action="/admin/add/country" method="post">
+  <label control="id">Work ID: </label>
+  <input type="text" name="id" id="id" /><br />
+
+  <label control="country">Country: </label>
+  <input type="text" name="country" id="country" /><br />
+
+  <input type="submit" value="Add" />
+</form>
+
+<h3>Add a language</h3>
+<form action="/admin/add/language" method="post">
+  <label control="id">Work ID: </label>
+  <input type="text" name="id" id="id" /><br />
+
+  <label control="language">Language: </label>
+  <input type="text" name="language" id="language" /><br />
+
+  <input type="submit" value="Add" />
+</form>
 
 {% end %}
 
