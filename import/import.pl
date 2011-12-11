@@ -27,8 +27,7 @@ sub import_movies {
     my $work_sth = $dbh->prepare("insert into Work (ID, Title, Year) values (?, ?, ?)");
     my $movie_sth = $dbh->prepare("insert into Movie (ID) values (?)");
     my $serie_sth = $dbh->prepare("insert into Serie (ID, EndYear) values (?, ?)");
-    my $epi_sth = $dbh->prepare("insert into Episode (ID, Season, EpisodeNum, Date, EpisodeTitle) values (?, ?, ?, ?, ?)");
-    my $epi_serie_sth = $dbh->prepare("insert into SerieEpisode (SID, EID) values (?, ?)");
+    my $epi_sth = $dbh->prepare("insert into Episode (ID, Season, EpisodeNum, Date, EpisodeTitle, SID) values (?, ?, ?, ?, ?, ?)");
     my $progress = Term::ProgressBar->new({name => "Importing movies",
                                            count => int(`wc -l movies.list`)});
     my $start = time();
@@ -54,8 +53,7 @@ sub import_movies {
                         # don't add an episode from a serie started before 2000
                         ($serie_id) = split(/ {/, $id);
                         $work_sth->execute($id, $title, $date) or die $work_sth->errstr;
-                        $epi_sth->execute($id, $season, $epi_number, $year, $epi_title) or die $epi_sth->errstr;
-                        $epi_serie_sth->execute($serie_id, $id) or die $epi_sth->errstr;
+                        $epi_sth->execute($id, $season, $epi_number, $year, $epi_title, $serie_id) or die $epi_sth->errstr;
                     }
                 }
                 elsif ($id =~ /"(.+)" \(([0-9]{4})[^\)]*\)$/) {

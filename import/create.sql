@@ -25,8 +25,10 @@ create table Episode (
        EpisodeNum integer not null,
        Date integer,
        EpisodeTitle varchar(512),
+       SID varchar(512),
        primary key (ID),
        foreign key (ID) references Work(ID)
+       foreign key (SID) references Serie(ID)
 );
 
 create table Genre (
@@ -48,14 +50,6 @@ create table Language (
        Language varchar(64),
        primary key (ID, Language),
        foreign key (ID) references Work(ID)
-);
-
-create table SerieEpisode (
-       SID varchar(512),
-       EID varchar(512),
-       primary key (SID, EID),
-       foreign key (SID) references Serie(ID),
-       foreign key (EID) references Episode(ID)
 );
 
 create table Person (
