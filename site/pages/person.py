@@ -1,11 +1,13 @@
 import tornado.ioloop
 import tornado.web
 import tornado.template
+from pages import AdminPage
 import sqlite3
 
-class Person(tornado.web.RequestHandler):
+class Person(AdminPage):
     def get(self, fname, lname, num):
         loader = tornado.template.Loader('templates/')
+        admin = self.get_current_user()
 
         conn = sqlite3.connect('db.sqlite')
         cur = conn.cursor()
@@ -31,9 +33,12 @@ class Person(tornado.web.RequestHandler):
             cur.execute('select ID from Writer where ' + cond, ID)
             written = cur.fetchall()
 
+            cur.close()
             self.write(loader.load('person.html').generate(person=person,
                                                            roles=roles,
                                                            directed=directed,
-                                                           written=written))
+                                                           written=written,
+                                                           admin=admin))
         else:
+            cur.close()
             self.write(loader.load('error.html').generate(message='This person does not exists: %s %s %s' % ID))

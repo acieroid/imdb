@@ -8,7 +8,11 @@
 {% block body %}
 {% import utils %}
 {% set (fname, lname, num, gender) = person %}
-    <h1>{{ fname }} {{ lname }}</h1>
+    <h1>{{ fname }} {{ lname }} ({{ gender }})</h1>
+
+    {% if admin %}
+    <a href="/admin/delete/person/{{ fname }}/{{ lname }}/{{ num }}">Delete</a>
+    {% end %}
 
     <h3>Roles</h3>
     {% if roles %}
@@ -24,7 +28,7 @@
     <h3>Directed</h3>
     {% if directed %}
       <ul>
-        {% for (ID) in directed %}
+        {% for (ID,) in directed %}
         <li>{% raw utils.work_link(ID) %}</li>
         {% end %}
       </ul>
@@ -35,7 +39,7 @@
     <h3>Written</h3>
     {% if written %}
       <ul>
-        {% for (ID) in written %}
+        {% for (ID,) in written %}
         <li>{% raw utils.work_link(ID) %}</li>
         {% end %}
       </ul>
