@@ -48,7 +48,8 @@ Movie: {{ title }} ({{ year }})
       <ul>
         {% for (fname, lname, num) in directors %}
         <li><a href="/person/{{ fname }}/{{ lname }}/{{ num }}">
-            {{ fname }} {{ lname }}</a></li>
+            {{ fname }} {{ lname }}</a>
+          {% if admin %}(<a href="/admin/delete/director/{{ fname }}/{{ lname }}/{{ num }}/">delete</a>){% end %}</li>
         {% end %}
       </ul>
     {% else %}
@@ -60,7 +61,8 @@ Movie: {{ title }} ({{ year }})
       <ul>
         {% for (fname, lname, num) in writers %}
         <li><a href="/person/{{ fname }}/{{ lname }}/{{ num }}">
-            {{ fname }} {{ lname }}</a></li>
+            {{ fname }} {{ lname }}</a>
+          {% if admin %}(<a href="/admin/delete/writer/{{ fname }}/{{ lname }}/{{ num }}/">delete</a>){% end %}</li>
         {% end %}
       </ul>
     {% else %}
@@ -72,7 +74,8 @@ Movie: {{ title }} ({{ year }})
       <ul>
         {% for (fname, lname, num, role) in actors %}
         <li><a href="/person/{{ fname }}/{{ lname }}/{{ num }}">
-            {{ fname }} {{ lname }} as {{ role }}</a></li>
+            {{ fname }} {{ lname }}</a> as <i>{{ role }}</i>
+          {% if admin %}(<a href="/admin/delete/actor/{{ fname }}/{{ lname }}/{{ num }}/{{ role }}">delete</a>){% end %}</li>
         {% end %}
       </ul>
     {% else %}

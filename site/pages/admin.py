@@ -119,9 +119,10 @@ class AdminDeleteWork(AdminPage):
             if utils.is_serie(ID):
                 # if a serie, also delete its episodes
                 op = 'like'
-                ID = ID + ' {%'
+                ID = ID + '%'
             cur.execute('delete from Movie where ID %s ?' % op, (ID,))
             cur.execute('delete from Episode where ID %s ?' % op, (ID,))
+            cur.execute('delete from Serie where ID %s ?' % op, (ID,))
             cur.execute('delete from Director where ID %s ?' % op, (ID,))
             cur.execute('delete from Writer where ID %s ?' % op, (ID,))
             cur.execute('delete from Actor where ID %s ?' % op, (ID,))
@@ -160,3 +161,49 @@ class AdminDeletePerson(AdminPage):
         else:
             cur.close()
             self.write(loader.load('error.html').generate(message='%s %s (%s) do not exists' % ID))
+
+class AdminDeletePersonType(AdminPage):
+    @tornado.web.authenticated
+    def get(self, t, fname, lname, num, ID, role):
+        loader = tornado.template.Loader('templates/')
+
+        conn = sqlite3.connect('db.sqlite')
+        cur = conn.cursor()
+
+        pID = (fname, lname, num, ID)
+        cond = 'FirstName = ? and LastName = ? and Num = ? and ID = ?'
+
+        if t == 'actor':
+            cond += ' and Role = ?'
+            pID = (fname, lname, num, ID, role)
+            cur.execute('select 1 from Actor where %s' % cond, pID)
+            if cur.fetchone():
+                cur.execute('delete from Actor where %s' % cond, pID)
+                conn.commit()
+                cur.close()
+                self.write(loader.load('success.html').generate(message='Actor deleted',
+                                                                next='/'))
+            else:
+                self.write(loader.load('error.html').generate(message='%s %s (%s) do not exists' % (fname, lname, num)))
+        elif t == 'director':
+            cur.execute('select 1 from Director where %s' % cond, pID)
+            if cur.fetchone():
+                cur.execute('delete from Director where %s' % cond, pID)
+                conn.commit()
+                cur.close()
+                self.write(loader.load('succes.html').generate(message='Director deleted',
+                                                               next='/'))
+            else:
+                self.write(loader.load('error.html').generate(message='%s %s (%s) do not exists' % (fname, lname, num)))
+        elif t == 'writer':
+            cur.execute('select 1 from Writer where %s' % cond, pID)
+            if cur.fetchone():
+                cur.execute('delete from Director where %s' % cond, pID)
+                conn.commit()
+                cur.close()
+                self.write(loader.load('succes.html').generate(message='Writer deleted',
+                                                               next='/'))
+            else:
+                self.write(loader.load('error.html').generate(message='%s %s (%s) do not exists' % (fname, lname, num)))
+        else:
+            self.write(loader.load('error.html').generate(message='Unknown type of person: %s' % t))
