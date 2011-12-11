@@ -4,7 +4,8 @@ use DBI;
 use Term::ProgressBar;
 
 print "Connecting to the database\n";
-my $dbh = DBI->connect("dbi:SQLite:dbname=db.sqlite", "", "", {AutoCommit => 0}) or die $!;
+my $db = "/dev/shm/imdb.sqlite";
+my $dbh = DBI->connect("dbi:SQLite:dbname=$db", "", "", {AutoCommit => 0}) or die $!;
 #my $dbh = DBI->connect("dbi:Pg:dbname=imdb", "", "", {AutoCommit => 0}) or die $!;
 
 sub year {
@@ -368,7 +369,7 @@ sub import_everything {
 }
 
 sub create_tables {
-    `sqlite3 db.sqlite '.read create.sql'`;
+    `sqlite3 $db '.read create.sql'`;
 }
 
 sub quit {

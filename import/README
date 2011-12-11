@@ -21,6 +21,7 @@ from ftp://ftp.fu-berlin.de/pub/misc/movies/database/).
   - languages.list.gz
   - movies.list.gz
   - writers.list.gz
+  - ratings.list.gz
 
 They need to be gunzipped and placed in the current working directory.
 
