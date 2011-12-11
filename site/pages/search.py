@@ -23,7 +23,7 @@ precedence = (
 )
 
 t_OPERATOR = r'(and|or)'
-t_COMPARATOR = r'(>=|<=|<|>|==)'
+t_COMPARATOR = r'(>=|<=|<|>|==|=~)'
 t_IDENTIFIER = r'[A-Z][a-zA-Z_]+'
 def t_VALUE(t):
     r'("[^"]+"|[0-9\.]+)'
@@ -69,11 +69,16 @@ def satisfies(l, predicate):
     else:
         return False
 
+def convert_pattern_matching(s):
+    # TODO: what to do if the user has entered a query with '%' and '?'
+    return re.sub(r'\?', '_', re.sub(r'\*', '%', s))
+
 def convert(l):
     conversion_table = {
         'and': ' and ',
         'or': ' or ',
         '==': ' = ',
+        '=~': ' like ',
         '<': ' < ',
         '<=': ' <= ',
         '>': ' > ',
@@ -98,6 +103,9 @@ def convert(l):
             if re.match(t_OPERATOR, l[0]):
                 return combine(helper(l[1]), conversion_table[l[0]], helper(l[2]))
             elif re.match(t_COMPARATOR, l[0]):
+                if l[0] == '=~':
+                    return combine((l[1], []), conversion_table[l[0]], 
+                                   ('?', [convert_pattern_matching(l[2])]))
                 if simple_identifier(l[1]):
                     return combine((l[1], []), conversion_table[l[0]], ('?', [l[2]]))
                 elif l[1] == 'Genre' or l[1] == 'Country' or l[1] == 'Language':
