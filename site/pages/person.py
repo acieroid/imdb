@@ -41,4 +41,4 @@ class Person(BasePage):
                                                            admin=admin))
         else:
             cur.close()
-            self.write(loader.load('error.html').generate(message='This person does not exists: %s %s %s' % ID))
+            self.error('This person does not exists: %s %s (%s)' % ID)

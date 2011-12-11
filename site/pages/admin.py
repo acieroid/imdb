@@ -29,11 +29,12 @@ class AdminLogin(BasePage):
 
         if auth:
             self.set_secure_cookie('mail', mail)
-            self.redirect(self.get_argument('next', '/admin'))
+            self.success('You are now logged', next='/admin')
         else:
-            self.write(loader.load('error.html').generate(message='Wrong mail or password'))
+            self.error('Wrong mail or password')
 
 class AdminLogout(BasePage):
+    @tornado.web.authenticated
     def get(self):
         loader = tornado.template.Loader('templates/')
         self.clear_cookie('mail')
@@ -61,15 +62,13 @@ class AdminAdd(BasePage):
         cur.execute('select 1 from Admin where Mail = ?', (mail,))
         if cur.fetchone():
             cur.close()
-            self.write(loader.load('error.html').generate(message='This admin already exists'))
+            self.error('This admin already exists')
         else:
             cur.execute('insert into Admin (Mail, Pass) values (?, ?)',
                         (mail, hashed_password))
             conn.commit()
             cur.close()
-            # TODO: check that the request is successful
-            self.write(loader.load('success.html').generate(message='Admin added',
-                                                            next='/admin'))
+            self.success('Admin added', next='/admin')
 
 class AdminAddWork(BasePage):
     @tornado.web.authenticated
@@ -92,7 +91,7 @@ class AdminDelete(BasePage):
 
         # an admin can't delete himself
         if to_delete == self.get_current_user():
-            self.write(loader.load('error.html').generate(message='You cannot delete yourself'))
+            self.error('You cannot delete yourself')
         else:
             # check that the admin exists
             cur.execute('select 1 from Admin where Mail = ?', (to_delete,))
@@ -101,11 +100,10 @@ class AdminDelete(BasePage):
                 cur.execute('delete from Admin where Mail = ?', (to_delete,))
                 conn.commit()
                 cur.close()
-                self.write(loader.load('success.html').generate(message='Admin deleted',
-                                                                next='/admin'))
+                self.success('Admin deleted', next='/admin')
             else:
                 cur.close()
-                self.write(loader.load('error.html').generate(message='Admin with mail %s do not exists' % to_delete))
+                self.error('Admin with mail %s does not exists' % to_delete)
 
 class AdminDeleteWork(BasePage):
     @tornado.web.authenticated
@@ -133,11 +131,10 @@ class AdminDeleteWork(BasePage):
             cur.execute('delete from Work where ID %s ?' % op, (ID,))
             conn.commit()
             cur.close()
-            self.write(loader.load('success.html').generate(message='Work and related stuff deleted',
-                                                            next='/'))
+            self.success('Work and related stuff deleted')
         else:
             cur.close()
-            self.write(loader.load('error.html').generate(message='Nothing exists with the ID %s' % ID))
+            self.error('Nothing exists with the ID \'%s\'' % ID)
 
 class AdminDeletePerson(BasePage):
     @tornado.web.authenticated
@@ -160,11 +157,10 @@ class AdminDeletePerson(BasePage):
             cur.execute('delete from Person where %s' % cond, ID)
             conn.commit()
             cur.close()
-            self.write(loader.load('success.html').generate(message='Person deleted',
-                                                            next='/'))
+            self.success('Person deleted')
         else:
             cur.close()
-            self.write(loader.load('error.html').generate(message='%s %s (%s) do not exists' % ID))
+            self.error('This person does not exists: %s %s (%s)' % ID)
 
 class AdminDeletePersonType(BasePage):
     @tornado.web.authenticated
@@ -185,30 +181,26 @@ class AdminDeletePersonType(BasePage):
                 cur.execute('delete from Actor where %s' % cond, pID)
                 conn.commit()
                 cur.close()
-                self.write(loader.load('success.html').generate(message='Actor deleted',
-                                                                next='/'))
+                self.success('Actor deleted')
             else:
-                self.write(loader.load('error.html').generate(message='%s %s (%s) do not exists' % (fname, lname, num)))
+                self.error('This actorx does not exists: %s %s (%s)' % (fname, lname, num))
         elif t == 'director':
             cur.execute('select 1 from Director where %s' % cond, pID)
             if cur.fetchone():
                 cur.execute('delete from Director where %s' % cond, pID)
                 conn.commit()
                 cur.close()
-                self.write(loader.load('succes.html').generate(message='Director deleted',
-                                                               next='/'))
+                self.success('Director deleted')
             else:
-                self.write(loader.load('error.html').generate(message='%s %s (%s) do not exists' % (fname, lname, num)))
+                self.error('This director does not exists: %s %s (%s)' % (fname, lname, num))
         elif t == 'writer':
             cur.execute('select 1 from Writer where %s' % cond, pID)
             if cur.fetchone():
                 cur.execute('delete from Director where %s' % cond, pID)
                 conn.commit()
                 cur.close()
-                self.write(loader.load('succes.html').generate(message='Writer deleted',
-                                                               next='/'))
+                self.success('Writer deleted')
             else:
-                self.write(loader.load('error.html').generate(message='%s %s (%s) do not exists' % (fname, lname, num)))
+                self.error('This writer does not exists: %s %s (%s)' % (fname, lname, num))
         else:
-            self.write(loader.load('error.html').generate(message='Unknown type of person: %s' % t))
-
+            self.error('Unknown type of person: %s' % t)

@@ -60,6 +60,4 @@ class Movie(BasePage):
                                                           genres=genres,
                                                           admin=admin))
         else:
-            self.write(loader.load('error.html').generate(message='Movie \'' +
-                                                          movie_id +
-                                                          '\' not found'))
+            self.error('Movie \'%s\' not found' % movie_id)

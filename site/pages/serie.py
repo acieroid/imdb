@@ -66,6 +66,4 @@ class Serie(BasePage):
                                                           episodes=episodes,
                                                           admin=admin))
         else:
-            self.write(loader.load('error.html').generate(message='Serie \'' +
-                                                          serie_id +
-                                                          '\' not found'))
+            self.error('Serie \'%s\' not found', serie_id)
