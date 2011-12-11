@@ -72,8 +72,60 @@ class AdminAdd(BasePage):
 
 class AdminAddWork(BasePage):
     @tornado.web.authenticated
-    def post(self):
-        self.write('TODO')
+    def post(self, t):
+        loader = tornado.template.Loader('templates/')
+
+        conn = sqlite3.connect('db.sqlite')
+        cur = conn.cursor()
+
+        title = self.get_argument('title', '')
+        epi_title = self.get_argument('epi_title', '')
+        try:
+            year = int(self.get_argument('year', ''))
+            note = int(self.get_argument('note', ''))
+            if note < 0 or note < 10:
+                raise ValueError('Invalid note')
+            if t == 'episode':
+                season = int(self.get_argument('season', ''))
+                epi_num = int(self.get_argument('epi_num', ''))
+                date = int(self.get_argument('date', ''))
+            if t == 'serie':
+                end_year = self.get_argument('end_year', None)
+                if end_year:
+                    end_year = int(end_year)
+        except ValueError:
+            self.error('Incorrect values, check the values that should be integers')
+            return
+
+        if t == 'movie':
+            ID = '%s (%d)' % (title, year)
+        elif t == 'serie':
+            ID = '"%s" (%d)' % (title, year)
+        elif t == 'episode':
+            ID = '"%s" (%d) {%s (#%d.%d)}' % (title, year, epi_title, season, epi_num)
+        else:
+            self.error('Unknown work type: %s' % t)
+
+        # check if already there
+        cur.execute('select 1 from Work where ID = ?', (ID,))
+        if cur.fetchone():
+            cur.close()
+            self.error('This work already exists')
+        else:
+            # add it
+            cur.execute('insert into Work (ID, Title, Year, Note) values (?, ?, ?, ?)',
+                        (ID, title, year, note))
+            if t == 'movie':
+                cur.execute('insert into Movie (ID) values (?)', (ID,))
+            elif t == 'serie':
+                cur.execute('insert into Serie (ID, EndYear) values (?, ?)',
+                            (ID, end_year))
+            elif t == 'episode':
+                cur.execute('insert into Episode (ID, Season, EpisodeNum, Date, EpisodeTitle) values (?, ?, ?, ?, ?)',
+                            (ID, season, epi_num, date, epi_title))
+            conn.commit()
+            cur.close()
+            self.success('Work added')
 
 class AdminAddPerson(BasePage):
     @tornado.web.authenticated

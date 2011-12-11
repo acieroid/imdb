@@ -13,4 +13,4 @@ class BasePage(tornado.web.RequestHandler):
         self.write(loader.load('error.html').generate(message=message))
     def success(self, message, next='/'):
         loader = tornado.template.Loader('templates/')
-        self.write(loader.load('success.html').generate(message=message))
+        self.write(loader.load('success.html').generate(message=message,next=next))
