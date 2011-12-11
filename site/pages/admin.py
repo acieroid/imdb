@@ -101,3 +101,61 @@ class AdminDelete(AdminPage):
             else:
                 cur.close()
                 self.write(loader.load('error.html').generate(message='Admin with mail %s do not exists' % to_delete))
+
+class AdminDeleteWork(AdminPage):
+    @tornado.web.authenticated
+    def get(self, ID):
+        loader = tornado.template.Loader('templates/')
+
+        conn = sqlite3.connect('db.sqlite')
+        cur = conn.cursor()
+
+        # check that the work exists
+        cur.execute('select 1 from Work where ID = ?', (ID,))
+        if cur.fetchone():
+            # delete it and everything related
+            op = '='
+            if utils.is_serie(ID):
+                # if a serie, also delete its episodes
+                op = 'like'
+                ID = ID + ' {%'
+            cur.execute('delete from Movie where ID %s ?' % op, (ID,))
+            cur.execute('delete from Episode where ID %s ?' % op, (ID,))
+            cur.execute('delete from Director where ID %s ?' % op, (ID,))
+            cur.execute('delete from Writer where ID %s ?' % op, (ID,))
+            cur.execute('delete from Actor where ID %s ?' % op, (ID,))
+            cur.execute('delete from Work where ID %s ?' % op, (ID,))
+            conn.commit()
+            cur.close()
+            self.write(loader.load('success.html').generate(message='Work and related stuff deleted',
+                                                            next='/'))
+        else:
+            cur.close()
+            self.write(loader.load('error.html').generate(message='Nothing exists with the ID %s' % ID))
+
+class AdminDeletePerson(AdminPage):
+    @tornado.web.authenticated
+    def get(self, fname, lname, num):
+        loader = tornado.template.Loader('templates/')
+
+        conn = sqlite3.connect('db.sqlite')
+        cur = conn.cursor()
+
+        ID = (fname, lname, num)
+        cond = 'FirstName = ? and LastName = ? and Num = ?'
+
+        # check that the person exists
+        cur.execute('select 1 from Person where %s' % cond, ID)
+        if cur.fetchone():
+            # delete it
+            cur.execute('delete from Director where %s' % cond, ID)
+            cur.execute('delete from Writer where %s' % cond, ID)
+            cur.execute('delete from Actor where %s' % cond, ID)
+            cur.execute('delete from Person where %s' % cond, ID)
+            conn.commit()
+            cur.close()
+            self.write(loader.load('success.html').generate(message='Person deleted',
+                                                            next='/'))
+        else:
+            cur.close()
+            self.write(loader.load('error.html').generate(message='%s %s (%s) do not exists' % ID))
