@@ -14,7 +14,7 @@ class Poster(tornado.web.RequestHandler):
         table=json.loads(response.read())
         if table['Response'] == 'True':
             poster = table['Poster']
-            if poster != 'N/A':
+            if poster != 'N/A' and title == table['Title']:
                 self.redirect(poster)
             else:
                 raise tornado.web.HTTPError(404)
