@@ -360,7 +360,7 @@ class AdminDeleteInfo(BasePage):
         conn = sqlite3.connect('db.sqlite')
         cur = conn.cursor()
 
-        ID = self.get_argunent('id', '')
+        ID = self.get_argument('id', '')
         info = self.get_argument(t, '')
 
         # check if relation between work and info exists

@@ -23,6 +23,7 @@ application = tornado.web.Application([
     (r'/admin/delete/work/(.*)', pages.AdminDeleteWork),
     (r'/admin/delete/person/(.+)/(.+)/(.*)', pages.AdminDeletePerson),
     (r'/admin/delete/(director|writer|actor)/(.+)/(.+)/(.*)/(.+)/?(.*)', pages.AdminDeletePersonType),
+    (r'/admin/delete/(genre|country|language)', pages.AdminDeleteInfo)
 ], cookie_secret='N53gLGkySeCvX5AjgUgmtAez7L8JhUP2hb+MYgizGWo=')
 
 if __name__ == '__main__':
