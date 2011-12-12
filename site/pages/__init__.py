@@ -4,5 +4,5 @@ from search import Search
 from movie import Movie
 from serie import Serie
 from person import Person
-from poster import Poster
+from images import Poster, Location
 from admin import *

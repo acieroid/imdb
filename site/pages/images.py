@@ -20,3 +20,12 @@ class Poster(tornado.web.RequestHandler):
                 raise tornado.web.HTTPError(404)
 	else:
             raise tornado.web.HTTPError(404)
+
+class Location(tornado.web.RequestHandler):
+    def get(self, countries):
+        gmap_url = 'http://maps.googleapis.com/maps/api/staticmap?center=Belgium&zoom=1&size=500x400&sensor=true&maptype=satellite'
+        for country in countries.split(','):
+            gmap_url += ('&markers=label:%s|%s' % 
+                         (country[0].capitalize(), country))
+        self.redirect(gmap_url)
+            

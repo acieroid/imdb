@@ -31,7 +31,8 @@ Movie: {{ title }} ({{ year }})
 
     <h3>Countries</h3>
     {% if countries %}
-      {{ ', '.join(countries) }}
+      {{ ', '.join(countries) }}<br />
+      <img src="/location/{{ ','.join(countries) }}" alt="Film locations"/>
     {% else %}
       No countries
     {% end %}
