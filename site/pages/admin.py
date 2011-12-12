@@ -347,3 +347,35 @@ class AdminDeletePersonType(BasePage):
                 self.error('This writer does not exists: %s %s (%s)' % (fname, lname, num))
         else:
             self.error('Unknown type of person: %s' % t)
+
+class AdminDeleteInfo(BasePage):
+    @tornado.web.authenticated
+    def post(self, t):
+        loader = tornado.template.Loader('templates/')
+
+        if t != 'genre' and t != 'country' and t != 'language':
+            self.error('Invalid info type: %s' % t)
+            return
+
+        conn = sqlite3.connect('db.sqlite')
+        cur = conn.cursor()
+
+        ID = self.get_argunent('id', '')
+        info = self.get_argument(t, '')
+
+        # check if relation between work and info exists
+        cur.execute('select 1 from %s where ID = ? and %s = ?' %
+                    (t.capitalize(), t.capitalize()),
+                    (ID, info))
+        if not cur.fetchone():
+            cur.close()
+            self.error('No such relation between %s and %s' % (ID, info))
+            return
+
+        # delete the relation
+        cur.execute('delete from %s where ID = ? and %s = ?' %
+                    (t.capitalize(), t.capitalize()),
+                    (ID, info))
+        conn.commit()
+        cur.close()
+        self.success('Info deleted')
