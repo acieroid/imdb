@@ -1,5 +1,5 @@
 create table Work (
-       ID varchar(512),
+       ID varchar(512) not null,
        Title varchar(512) not null,
        Year integer not null,
        Note integer,
@@ -7,47 +7,47 @@ create table Work (
 );
 
 create table Movie (
-       ID varchar(512),
+       ID varchar(512) not null,
        primary key (ID),
        foreign key (ID) references Work(ID)
 );
 
 create table Serie (
-       ID varchar(512),
+       ID varchar(512) not null,
        EndYear integer,
        primary key (ID),
        foreign key (ID) references Work(ID)
 );
 
 create table Episode (
-       ID varchar(512),
-       Season integer not null,
-       EpisodeNum integer not null,
+       ID varchar(512) not null,
+       Season integer,
+       EpisodeNum integer,
        Date integer,
        EpisodeTitle varchar(512),
-       SID varchar(512),
+       SID varchar(512) not null,
        primary key (ID),
        foreign key (ID) references Work(ID)
        foreign key (SID) references Serie(ID)
 );
 
 create table Genre (
-       ID varchar(512),
-       Genre varchar(64),
+       ID varchar(512) not null ,
+       Genre varchar(64) not null,
        primary key (ID, Genre),
        foreign key (ID) references Work(ID)
 );
 
 create table Country (
-       ID varchar(512),
-       Country varchar(64),
+       ID varchar(512) not null,
+       Country varchar(64) not null,
        primary key (ID, Country),
        foreign key (ID) references Work(ID)
 );
 
 create table Language (
-       ID varchar(512),
-       Language varchar(64),
+       ID varchar(512) not null,
+       Language varchar(64) not null,
        primary key (ID, Language),
        foreign key (ID) references Work(ID)
 );

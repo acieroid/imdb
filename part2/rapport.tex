@@ -64,6 +64,11 @@ raisons:
 Lors de l'import, la base de donnée a été placée en RAM (dans
 \texttt{/dev/shm/}) afin de ne pas être limité par la vitesse d'écriture du
 disque dur.
+
+Les valeurs pouvant être nulles dans le diagramme entité-associations
+sont remplacées par des chaînes de caractère vides dans le cas où sont
+valeurs sont des chaînes de caractères, ou par la valeur \texttt{null}
+dans le cas de nombres.
 \section{Requêtes demandées}
 \section{Hypothèses}
 

@@ -44,12 +44,12 @@ sub import_movies {
             # TODO: maybe don't filter here but with $date later, to
             # avoid some foreign key problems with other files ?
             if (valid_year($year)) {
-                if ($id =~ /"(.+)" \(([0-9]{4})[^\)]*\) \{(.*)\(#([0-9]{1,3})\.([0-9]{1,3})\)\}$/) {
+                if ($id =~ /"(.+)" \(([0-9]{4})[^\)]*\) \{(.*)(\(#([0-9]{1,3})\.([0-9]{1,3})\))?\}$/) {
                     $title = $1;
                     $date = $2;
                     $epi_title = $3;
-                    $season = $4;
-                    $epi_number = $5;
+                    $season = $5;
+                    $epi_number = $6;
                     if (valid_year($year)) {
                         # don't add an episode from a serie started before 2000
                         ($serie_id) = split(/ {/, $id);
