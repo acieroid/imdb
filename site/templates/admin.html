@@ -4,11 +4,22 @@
 Admin panel
 {% end %}
 
+{% block javascript %}
+$(document).ready(function(){
+    $('div[class="action"] h3').show();
+    $('div[class="action"] form').hide();
+    $('div[class="action"] h3').click(function () {
+        $(this).next('form').toggle('slow');
+    });
+});
+{% end %}
+
 {% block body %}
 <h1>Admin panel</h1>
 You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
-<h3>Add an admin<h3>
+<div class="action">
+<h3>Add an admin</h3>
 <form action="/admin/add" method="post">
   <label control="mail">Mail: </label>
   <input type="text" name="mail" id="mail" /><br />
@@ -17,7 +28,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Add" />
 </form>
+</div>
 
+<div class="action">
 <h3>Delete an admin</h3>
 <form action="/admin/delete" method="post">
   <label control="mail">Mail: </label>
@@ -25,7 +38,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Delete" />
 </form>
+</div>
 
+<div class="action">
 <h3>Add a movie</h3>
 <form action="/admin/add/movie" method="post">
   <label control="title">Title: </label>
@@ -39,7 +54,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Add" />
 </form>
+</div>
 
+<div class="action">
 <h3>Add a serie</h3>
 <form action="/admin/add/serie" method="post">
   <label control="title">Title: </label>
@@ -56,7 +73,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Add" />
 </form>
+</div>
 
+<div class="action">
 <h3>Add an episode</h3>
 <form action="/admin/add/episode" method="post">
   <label control="title">Serie title: </label>
@@ -82,7 +101,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Add" />
 </form>
+</div>
 
+<div class="action">
 <h3>Add a director</h3>
 <form action="/admin/add/director" method="post">
   <label control="id">Work ID: </label>
@@ -102,7 +123,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Add" />
 </form>
+</div>
 
+<div class="action">
 <h3>Add a writer</h3>
 <form action="/admin/add/writer" method="post">
   <label control="id">Work ID: </label>
@@ -122,7 +145,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Add" />
 </form>
+</div>
 
+<div class="action">
 <h3>Add an actor</h3>
 <form action="/admin/add/actor" method="post">
   <label control="id">Work ID: </label>
@@ -145,7 +170,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Add" />
 </form>
+</div>
 
+<div class="action">
 <h3>Add a genre</h3>
 <form action="/admin/add/genre" method="post">
   <label control="id">Work ID: </label>
@@ -156,7 +183,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Add" />
 </form>
+</div>
 
+<div class="action">
 <h3>Add a country</h3>
 <form action="/admin/add/country" method="post">
   <label control="id">Work ID: </label>
@@ -167,7 +196,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Add" />
 </form>
+</div>
 
+<div class="action">
 <h3>Add a language</h3>
 <form action="/admin/add/language" method="post">
   <label control="id">Work ID: </label>
@@ -178,7 +209,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Add" />
 </form>
+</div>
 
+<div class="action">
 <h3>Delete a genre</h3>
 <form action="/admin/delete/genre" method="post">
   <label control="id">Work ID: </label>
@@ -189,7 +222,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Delete" />
 </form>
+</div>
 
+<div class="action">
 <h3>Delete a country</h3>
 <form action="/admin/delete/country" method="post">
   <label control="id">Work ID: </label>
@@ -200,7 +235,9 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Delete" />
 </form>
+</div>
 
+<div class="action">
 <h3>Delete a language</h3>
 <form action="/admin/delete/language" method="post">
   <label control="id">Work ID: </label>
@@ -211,5 +248,6 @@ You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
 
   <input type="submit" value="Delete" />
 </form>
+</div>
 
 {% end %}
