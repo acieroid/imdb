@@ -5,6 +5,16 @@
 Serie: {{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})
 {% end %}
 
+{% block javascript %}
+$(document).ready(function(){
+    $('div[class="season"] ul').hide();
+    $('div[class="season"] h4').click(function () {
+        $('div[class="season"] ul)'.hide('slow');
+        $(this).next('ul').toggle('slow');
+    });
+});
+{% end %}
+
 {% block body %}
 {% set (title, year, note, endyear) = serie %}
     <h1>{{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})</h1>
@@ -30,21 +40,23 @@ Serie: {{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})
     {% end %}
 
     {% if episodes %}
-    <h3>Episodes<h3>
-    {% set (saisonP) = 0 %}
-    {% for (epID, saison, numE, titre) in episodes %}
-        {% if saison != saisonP %}
-            {% if saisonP != 0 %}
+    <h3>Episodes</h3>
+    {% set (seasonP) = 0 %}
+    {% for (epID, season, numE, title) in episodes %}
+        {% if season != seasonP %}
+            {% if seasonP != 0 %}
         </ul>
+        </div>
             {% end %}
-        <h4>Season {{ saison }}</h4>
+        <div class="season">
+        <h4>Season {{ season }}</h4>
         <ul>
         {% end %}
             <li><a href="/episode/{{ epID }}">
-                {{ numE }}. {{ titre }}</a>
+                {{ numE }}. {{ title }}</a>
               {% if admin %}(<a href="/admin/delete/work/{{ ID }}">delete</a>){% end %}
             </li>
-        {% set (saisonP) = saison %}
+        {% set (seasonP) = season %}
     {% end %}
     </ul>
     {% end %}
