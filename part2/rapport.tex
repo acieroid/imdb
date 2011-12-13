@@ -1,0 +1,70 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc} 
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{a4wide}
+\usepackage{subfig}
+\usepackage{wrapfig}
+\usepackage{url}
+\usepackage[pdftex]{hyperref}
+\hypersetup{
+  colorlinks,
+  citecolor=black,
+  filecolor=black,
+  linkcolor=black,
+  urlcolor=black
+}
+
+\renewcommand{\baselinestretch}{1.05}
+
+\title{INFO-H-303: projet IMDB -- première partie}
+
+\author{Quentin \textsc{Stiévenart} \and Damien \textsc{Wiltgen}}
+\date{\today}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\begin{document}
+
+\maketitle
+
+\HRule
+
+\section{Modèle entité-association}
+% TODO: refaire le schéma qu'ils ont rendu avec dia/inkscape
+\subsection{Contraintes d'intégrité}
+\section{Modèle relationnel}
+% TODO: simplement une réécriture du create.sql
+\section{Méthode d'extraction des données}
+Pour extraire les données depuis les fichiers d'\emph{IMDB}, Perl a
+été choisi, grâce à la faciliter d'écrire des programmes manipulant du
+texte ainsi qu'à la présence du module \texttt{DBI}, qui permet de
+manipuler plusieurs moteurs de base de donnée en passant par une
+interface unique. Il a ainsi pu être possible de tester la vitesse
+d'importation de données sur plusieurs moteurs de base de données, et
+le choix de moteur s'est posé sur \emph{SQLite} pour plusieurs
+raisons:
+
+\begin{list}{-}{}
+  \item Les tests de contraintes étrangères sont désactivés par
+    défaut, ce qui a pour effet de grandement améliorer le temps
+    d'import des données. Il est possible de désactiver ces tests dans
+    d'autres moteurs, mais cela dépend des moteurs et varie en
+    complexité.
+  \item Comme la base de donnée est simplement stockée dans un
+    fichier, il est très simple de la mettre en place sur une nouvelle
+    machine, d'en faire des sauvegardes, et de repartir avec une base
+    de données vide.
+  \item L'API \emph{SQLite} de Python (le langage utilisé pour
+    l'interface web) est très simple et est fournie avec Python.
+\end{list}
+
+Lors de l'import, la base de donnée a été placée en RAM (dans
+\texttt{/dev/shm/}) afin de ne pas être limité par la vitesse d'écriture du
+disque dur.
+\section{Requêtes demandées}
+\section{Hypothèses}
+
+\end{document}
