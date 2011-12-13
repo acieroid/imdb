@@ -357,17 +357,6 @@ sub clean_db {
     $dbh->commit();
 }
 
-sub import_everything {
-    import_movies;
-    import_countries;
-    import_languages;
-    import_genres;
-    import_actors_male;
-    import_actors_female;
-    import_directors;
-    import_writers;
-}
-
 sub create_tables {
     `sqlite3 $db '.read create.sql'`;
 }
@@ -376,6 +365,20 @@ sub quit {
     print "Disconnecting from the database\n";
     $dbh->disconnect();
     exit 0;
+}
+
+sub import_everything {
+    import_movies;
+    import_ratings;
+    import_countries;
+    import_languages;
+    import_genres;
+    import_actors_male;
+    import_actors_female;
+    import_directors;
+    import_writers;
+    clean_db;
+    quit;
 }
 
 my @choices = ( "Create the tables",
