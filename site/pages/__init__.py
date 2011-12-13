@@ -5,4 +5,5 @@ from movie import Movie
 from serie import Serie
 from person import Person
 from images import Poster, Location
+from vote import Vote
 from admin import *

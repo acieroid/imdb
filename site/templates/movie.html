@@ -5,6 +5,25 @@
 Movie: {{ title }} ({{ year }})
 {% end %}
 
+{% block javascript %}
+$(document).ready(function () {
+    $('#upvote').click(function () {
+        var upvotes = parseInt($.trim($('#upvotes').html()));
+        $.get('/upvote/{{ ID }}', function (data) {
+            $('#upvotes.html').html(upvotes+1);
+        });
+    });
+    $('#downvote').click(function () {
+        var downvotes = parseInt($.trim($('#downvotes').html()));
+        $.get('/downvote/{{ ID }}', function (data) {
+            $('#downvotes.html').html(upvotes+1);
+        });
+        $.get('/downvote/{{ ID }}');
+        /*location.reload();*/
+    });
+});
+{% end %}
+
 {% block body %}
 {% set (title, year, note) = movie %}
     <h1>{{ title }} ({{ year }})</h1>
@@ -21,6 +40,10 @@ Movie: {{ title }} ({{ year }})
       {% else %} -
       {% end %}
     /10
+
+    <span id="upvotes">{{ upvotes }}</span>+/
+    <span id="downvotes">{{ downvotes }}</span>-<br/>
+    Vote <a href="#" id="upvote">up</a> or <a href="#" id="downvote">down</a>.
 
     <h3>Genres</h3>
     {% if genres %}

@@ -13,6 +13,7 @@ application = tornado.web.Application([
     (r'/person/(.+)/(.+)/(.*)', pages.Person),
     (r'/poster/(.+)/(.+)', pages.Poster),
     (r'/location/(.+)', pages.Location),
+    (r'/(up|down)vote/(.*)', pages.Vote),
     (r'/admin', pages.AdminPanel),
     (r'/admin/login', pages.AdminLogin),
     (r'/admin/logout', pages.AdminLogout),
