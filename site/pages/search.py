@@ -29,6 +29,8 @@ def t_VALUE(t):
     r'("[^"]+"|[0-9\.]+)'
     if t.value[0] == '"':
         t.value = t.value[1:-1]
+    else:
+        t.value = int(t.value)
     return t
 t_LPAREN = '\('
 t_RPAREN = '\)'
@@ -105,12 +107,12 @@ def convert(l):
             elif re.match(t_COMPARATOR, l[0]):
                 if l[0] == '=~':
                     return combine((l[1], []), conversion_table[l[0]], 
-                                   ('?', [convert_pattern_matching(l[2])]))
+                                   ('? ', [convert_pattern_matching(l[2])]))
                 if simple_identifier(l[1]):
                     return combine((l[1], []), conversion_table[l[0]], ('?', [l[2]]))
                 elif l[1] == 'Genre' or l[1] == 'Country' or l[1] == 'Language':
-                    return combine(('?', [l[2]]), 'in (select * from ' + l[1]
-                                   + ' where ' + l[1] + '.ID = W.ID) ', ('', []))
+                    return (' exists (select 1 from %s where %s.ID = W.ID and %s.%s = ?)' %
+                            ((l[1],)*4), [l[2]])
         else:
             return ('', [])
     if satisfies(l, lambda x: (x == 'EpisodeNum' or
