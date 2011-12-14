@@ -15,10 +15,10 @@ class Vote(tornado.web.RequestHandler):
         cur.execute('select 1 from Votes where ID = ?', (ID,))
         if not cur.fetchone():
             # no, add the entry
-            cur.execute('insert into Votes (ID, Up, Down) value (?, 0, 0)', (ID,))
+            cur.execute('insert into Votes (ID, Up, Down) values (?, 0, 0)', (ID,))
 
         # add the vote
         cur.execute('update Votes set %s = %s + 1 where ID = ?' %
-                    t.capitalize(), (ID,))
+                    (t.capitalize(), t.capitalize()), (ID,))
         conn.commit()
         cur.close()

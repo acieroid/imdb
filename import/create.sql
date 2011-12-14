@@ -96,3 +96,11 @@ create table Admin (
        Pass char(65) not null, -- The SHA256-sum of the pass
        primary key (Mail)
 );
+
+create table Votes (
+      ID varchar(512) not null,
+      Up integer not null,
+      Down integer not null,
+      primary key (ID),
+      foreign key (ID) references Work(ID)
+);

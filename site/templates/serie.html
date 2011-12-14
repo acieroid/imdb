@@ -9,7 +9,7 @@ Serie: {{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})
 $(document).ready(function(){
     $('div[class="season"] ul').hide();
     $('div[class="season"] h4').click(function () {
-        $('div[class="season"] ul)'.hide('slow');
+        $('div[class="season"] ul').hide('slow');
         $(this).next('ul').toggle('slow');
     });
 });

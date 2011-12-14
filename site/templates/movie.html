@@ -7,16 +7,19 @@ Movie: {{ title }} ({{ year }})
 
 {% block javascript %}
 $(document).ready(function () {
-    $('#upvote').click(function () {
+    $('#upvote').click(function (e) {
+        e.preventDefault();
         var upvotes = parseInt($.trim($('#upvotes').html()));
         $.get('/upvote/{{ ID }}', function (data) {
-            $('#upvotes.html').html(upvotes+1);
+
+            $('#upvotes').html(upvotes+1);
         });
     });
-    $('#downvote').click(function () {
+    $('#downvote').click(function (e) {
+        e.preventDefault();
         var downvotes = parseInt($.trim($('#downvotes').html()));
         $.get('/downvote/{{ ID }}', function (data) {
-            $('#downvotes.html').html(upvotes+1);
+            $('#downvotes').html(downvotes+1);
         });
         $.get('/downvote/{{ ID }}');
         /*location.reload();*/

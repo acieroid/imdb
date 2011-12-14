@@ -47,6 +47,11 @@ class Movie(BasePage):
             cur.execute('select Genre from Genre where ID = ?',
                         (movie_id,))
             genres = map(lambda x: x[0], cur.fetchall())
+
+            # fetch the votes
+            cur.execute('select Up, Down from Votes where ID = ?', 
+                        (movie_id,))
+            (upvotes, downvotes) = cur.fetchone() or (0, 0)
           
             cur.close()
             
@@ -58,6 +63,8 @@ class Movie(BasePage):
                                                           countries=countries,
                                                           languages=languages,
                                                           genres=genres,
+                                                          upvotes=upvotes,
+                                                          downvotes=downvotes,
                                                           admin=admin))
         else:
             self.error('Movie \'%s\' not found' % movie_id)
