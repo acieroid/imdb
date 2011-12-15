@@ -8,6 +8,7 @@
 \usepackage{subfig}
 \usepackage{wrapfig}
 \usepackage{url}
+\usepackage{latexsym} % \Join
 \usepackage[pdftex]{hyperref}
 \hypersetup{
   colorlinks,
@@ -16,8 +17,19 @@
   linkcolor=black,
   urlcolor=black
 }
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+%\renewcommand{\baselinestretch}{1.05}
 
-\renewcommand{\baselinestretch}{1.05}
+\usepackage{listings}
+
+\lstset{ %
+language=SQL,
+showspaces=false
+showstringspaces=false,
+showtabs=false,
+tabsize=2,
+}
+
 
 \title{INFO-H-303: projet IMDB -- première partie}
 
@@ -70,6 +82,133 @@ sont remplacées par des chaînes de caractère vides dans le cas où sont
 valeurs sont des chaînes de caractères, ou par la valeur \texttt{null}
 dans le cas de nombres.
 \section{Requêtes demandées}
+Les requêtes demandées étaient les suivantes:
+\begin{list}{-}{}
+  \item R1 : Les acteurs qui ont joué toutes les années entre 2003 et
+    2007.
+  \item R2 : Les auteurs qui ont écrit au moins deux films pendant la
+    même année.
+  \item R3 : Les acteurs Y qui sont à une distance 2 d'un acteur X. Un
+    acteur Y est à une distance 1 d'un acteur X si ces deux acteurs
+    ont joué dans le même film.
+  \item R4 : Les épisodes de série où il n'y a aucun acteur masculin.
+  \item R5 : Les acteurs qui ont joué dans le plus de séries.
+  \item R6 : Les séries avec leur nombre total d'épisodes, le nombre
+    d'épisodes moyen par an et le nombre d'acteurs moyen par saison
+    depuis leur année de création et ce pour toutes les séries dont la
+    note est supérieure à la moyenne des notes des séries.
+\end{list}
+\subsection{Algèbre relationnelle}
+\begin{list}{-}{}
+  \item R1 :
+    \begin{align*}
+      WorkInPeriod & \leftarrow \sigma_{Year \geq 2003 \wedge Year \leq 2007} (Work) \\
+      AllYears & \leftarrow \pi_{Year} (WorkInPeriod)\\
+      R1 & \leftarrow \pi_{FirstName, LastName, Num, Year} (Actor * WorkInPeriod) / AllYears
+    \end{align*}
+  \item R2 :
+    \begin{align*}
+      MovieWriter & \leftarrow Writer * (Work * Movie) \\
+      MovieWriter' & \leftarrow \alpha_{ID,Title:ID2,Title2} (MovieWriter) \\
+      R2 & \leftarrow \pi_{FirstName,LastName,Num} (MovieWriter \Join_{ID \neq ID2 \wedge Title \neq Title2} MovieWriter')
+    \end{align*}
+  \item R3 :
+    Si les infos sur l'acteur X sont dans $XFName$, $XLName$, $XNum$
+    \begin{align*}
+      X & \leftarrow \sigma_{FirstName = XFName \wedge LastName = XLName \wedge Num = XNum} (Actor) \\
+      R3 & \leftarrow \pi_{FirstName,LastName,Num}(Actor*\pi_{ID} (X * (Work * Movie))
+    \end{align*}
+  \item R4 :
+    \begin{align*}
+      R4 & \leftarrow \pi_{ID} (Episodes) - \pi_{ID} ((\sigma_{Gender='M'} Person) * Actor * Episode)
+    \end{align*}
+\end{list}
+\subsection{Calcul relationnel tuple}
+\begin{list}{-}{}
+  \item R1 :
+    \begin{align*}
+    \end{align*}
+  \item R2 :
+    \begin{align*}
+    \end{align*}
+  \item R3 :
+    \begin{align*}
+      \{ x.FirstName, x.LastName, x.Num | &Actor(x) \wedge \exists y_1, y_2, z ( \\
+      &Actor(z) \wedge Actor(y_1) \wedge Actor(y_2) \wedge \\
+      &y_1.ID = x.ID \wedge y_2.ID = z.ID \wedge y_1.ID \neq y_2.ID \wedge\\
+      &y_1.FirstName = y_2.FirstName \wedge \\
+      &y_1.LastName = y_2.LastName \wedge \\
+      &y_1.Num = y_2.Num) \wedge \\
+      &z.FirstName = XFName \wedge z.LastName = XLName \wedge \\
+      &z.Num = XNum\}
+    \end{align*}
+  \item R4 :
+    \begin{align*}
+      \{ e.ID | Episode(e) \wedge \lnot \exists p, a (&Person(p) ~\wedge Actor(a) ~\wedge \\
+        & p.FirstName = a.FirstName ~\wedge \\
+        & p.LastName = a.LastName ~\wedge \\
+        & p.Num = a.Num ~\wedge \\
+        & p.Gender = `M`)\}
+    \end{align*}
+\end{list}
+          
+\subsection{SQL}
+\begin{list}{-}{}
+  \item R1 :
+    \begin{lstlisting}
+select FirstName, LastName, Num from Actor where
+  count(select distinct(Year) from Work
+          where Year >= 2003 
+            and Year <= 2007
+            and Actor.ID = Work.ID) = (2007-2003)
+
+    \end{lstlisting}
+  \item R2 :
+% lolwat :(
+    \begin{lstlisting}
+select W1.FirstName, W1.LastName, W1.Num
+  from Writer W1, Writer W2
+  where W1.FirstName = W2.FirstName 
+    and W1.LastName = W2.LastName
+    and W1.Num = W2.Num
+    and count(select * from Work Work1, Work Work2, Movie M1, MovieM2 
+                where W1.ID = M1.ID
+                  and W2.ID = M2.ID
+                  and W1.ID != W2.ID
+                  and Work1.ID = M1.ID
+                  and Work2.ID = M2.ID) >= 2
+    \end{lstlisting}
+  \item R3 :
+    \begin{lstlisting}
+select distinct X.FirstName, X.LastName, X.Num from Actor X
+  where exists (select * from Actor Y1
+                  where exists (select * from Actor Z, Actor Y2 
+                                  where Z.ID = Y2.ID
+                                    and Z.ID != X.ID
+                                    and Z.FirstName = ZFName
+                                    and Z.LastName = ZLName
+                                    and Z.Num = ZNum
+                                    and Y2.FirstName = Y1.FirstName
+                                    and Y2.LastName = Y1.LastName
+                                    and Y2.Num = Y1.Num)
+                    and Y1.ID = X.ID)
+    \end{lstlisting}
+  \item R4 :
+    \begin{lstlisting}
+select ID from Episode
+  where not exists (select * from Person, Actor
+                      where Person.FirstName = Actor.FirstName
+                        and Person.LastName = Actor.LastName
+                        and Person.Num = Actor.Num
+                        and Actor.ID = Episode.ID)
+    \end{lstlisting}
+  \item R5 :
+    \begin{lstlisting}
+    \end{lstlisting}
+  \item R6 :
+    \begin{lstlisting}
+    \end{lstlisting}
 \section{Hypothèses}
+\end{list}
 
 \end{document}
