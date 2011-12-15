@@ -7,6 +7,12 @@ import ply.yacc
 import re
 from pages import BasePage
 
+class QueryError(Exception):
+    def __init__(self, message):
+        self.message = message
+    def __str__(self):
+        return repr(self.message)
+
 # Query language
 tokens = (
     'OPERATOR',
@@ -49,7 +55,7 @@ t_RBRACE = r'\}'
 t_ignore_SPACE = r'\s+'
 
 def t_error(t):
-    raise TypeError('error when lexing "%s"' % t.value)
+    raise QueryError('error when lexing "%s"' % t.value)
 
 ply.lex.lex()
 
@@ -90,7 +96,7 @@ def p_container_content(p):
     p[0] = p[1]
 
 def p_error(p):
-    raise TypeError('syntax error at "%s"' % p.value)
+    raise QueryError('syntax error at "%s"' % p.value)
 
 ply.yacc.yacc()
 
@@ -110,12 +116,6 @@ def satisfies(l, predicate):
 def convert_pattern_matching(s):
     # TODO: what to do if the user has entered a query with '%' and '?'
     return re.sub(r'\?', '_', re.sub(r'\*', '%', s))
-
-class QueryError(Exception):
-    def __init__(self, message):
-        self.message = message
-    def __str__(self):
-        return repr(self.message)
 
 def convert(l):
     conversion_table = {
@@ -231,10 +231,6 @@ class Search(BasePage):
         # parse the query
         try:
             parsed = ply.yacc.parse(self.get_argument('search', ''))
-        except TypeError as (e,):
-            self.error('Your query was incorrect: %s' % e)
-
-        try:
             ((query, args), typeofdata) = convert(parsed)
             
             # execute the query
