@@ -140,12 +140,13 @@ def convert(l):
                            'FirstName', 'LastName', 'Num'])
     def valid_var(t, x):
         if t == 'Episode':
-            return in_list(x, ['Title', 'Year', 'Note', 'EndYear', 
-                               'Season', 'EpisodeNum', 'EpisodeTitle'])
+            return (valid_var('Serie', x) or 
+                    in_list(x, ['Title', 'Year', 'Note', 'EndYear', 
+                                'Season', 'EpisodeNum', 'EpisodeTitle']))
         elif t == 'Serie':
-            return in_list(x, ['Title', 'Year', 'Note', 'EndYear'])
+            return (valid_var('Movie', x) or x == 'EndYear')
         elif t == 'Movie':
-            return in_list(x, ['Title', 'Year', 'Note'])
+            return in_list(x, ['Title', 'Year', 'Note', 'Genre', 'Language', 'Country'])
         elif t == 'Person':
             return in_list(x, ['FirstName', 'LastName', 'Num'])
     def combine(a, op, b):
@@ -181,15 +182,15 @@ def convert(l):
 
     if satisfies(l, lambda x: (x == 'EpisodeNum' or
                                x == 'EpisodeTitle')):
-        if satisfies(l, lambda x: not valid_var('Episode')):
+        if satisfies(l, lambda x: not valid_var('Episode', x)):
             raise QueryError('Query contains invalid variable for episode')
-        res = combine(('select ID from Work W, Serie, Episode where W.ID = Serie.ID and W.ID = Episode.ID and ',
+        res = combine(('select W.ID from Work W, Serie, Episode where W.ID = Serie.ID and W.ID = Episode.ID and ',
                         []), '', helper(l))
         t = 'Episode'
     elif satisfies(l, lambda x: (x == 'EndYear')):
-        if satisfies(l, lambda x: not valid_var('Serie')):
+        if satisfies(l, lambda x: not valid_var('Serie', x)):
             raise QueryError('Query contains invalid variable for serie')
-        res = combine(('select ID from Work W, Serie where W.ID = Serie.ID and ',
+        res = combine(('select W.ID from Work W, Serie where W.ID = Serie.ID and ',
                         []), '', helper(l))
         t = 'Serie'
     elif satisfies(l, lambda x: (x == 'FirstName' or
@@ -202,7 +203,7 @@ def convert(l):
     else:
         if satisfies(l, lambda x: not valid_var('Movie', x)):
             raise QueryError('Query contains invalid variable for movie')
-        res = combine(('select ID from Work W where ', []), '', helper(l))
+        res = combine(('select W.ID from Work W where ', []), '', helper(l))
         t = 'Movie'
 
     if sort:
