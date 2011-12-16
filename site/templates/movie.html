@@ -24,6 +24,12 @@ $(document).ready(function () {
         $.get('/downvote/{{ ID }}');
         /*location.reload();*/
     });
+
+    $('#location').hide();
+    $('#locate').click(function (e) {
+      e.preventDefault();
+      $('#location').toggle('slow');
+    });
 });
 {% end %}
 
@@ -71,8 +77,8 @@ $(document).ready(function () {
 
     <span class="info">Countries</span>:
     {% if countries %}
-      {{ ', '.join(countries) }}<br />
-      <img src="/location/{{ ','.join(countries) }}" alt="Film locations"/>
+      {{ ', '.join(countries) }}. <a href="#" id="locate">Show map</a><br /> 
+      <img src="/location/{{ ','.join(countries) }}" alt="Film locations" id="location"/>
     {% else %}
       No countries
     {% end %}
