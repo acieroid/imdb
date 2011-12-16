@@ -1,17 +1,22 @@
 <html>
   <head>
     <title>{% block title %}IMDB{% end %}</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css" />
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript">
       {% block javascript %} {% end %}
     </script>
   </head>
   <body>
-    <form action="/search" method="get">
-      <input type="text" name="search" id="search" />
-      <input type="submit" value="Search" />
-    </form>
-    <a href="/admin">Admin panel</a><br /><br />
+    <div id="admin_link">
+      <a href="/admin">Admin panel</a>
+    </div>
+    <div id="search_bar">
+      <form action="/search" method="get">
+        <input type="text" name="search" id="search" />
+        <input type="submit" value="Search" id="search_submit" />
+      </form>
+    </div>
     {% block body %} {% end %}
   </body>
 </html>

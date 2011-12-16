@@ -2,8 +2,15 @@ import tornado.ioloop
 import tornado.web
 import tornado.template
 import sqlite3
-
+import os.path
 import pages
+
+settings = {
+    'static_path': os.path.join(os.path.dirname(__file__), 'static'),
+    'cookie_secret': 'N53gLGkySeCvX5AjgUgmtAez7L8JhUP2hb+MYgizGWo=',
+    'xsrf_cookies': True,
+    'debug': True
+}
 
 application = tornado.web.Application([
     (r'/', pages.Main),
@@ -27,9 +34,8 @@ application = tornado.web.Application([
     (r'/admin/delete/person/(.+)/(.+)/(.*)', pages.AdminDeletePerson),
     (r'/admin/delete/(director|writer|actor)/(.+)/(.+)/(.*)/(.+)/?(.*)', pages.AdminDeletePersonType),
     (r'/admin/delete/(genre|country|language)', pages.AdminDeleteInfo)
-], cookie_secret='N53gLGkySeCvX5AjgUgmtAez7L8JhUP2hb+MYgizGWo=')
+], **settings)
 
 if __name__ == '__main__':
     application.listen(8888)
-    application.debug = True
     tornado.ioloop.IOLoop.instance().start()

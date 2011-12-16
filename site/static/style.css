@@ -1,0 +1,32 @@
+#search, #search_submit {
+    border-radius: 5px;
+    height: 45px;
+    font-size: 150%;
+}
+
+#search {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    width: 60%;
+}
+
+#search_submit {
+    border-radius: 10px 50px 50px 10px;
+}
+
+#search_bar {
+    text-align: center;
+}
+
+#admin_link {
+    float: right;
+    margin-left: auto;
+    font-size: 70%;
+}
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
