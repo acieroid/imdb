@@ -8,7 +8,6 @@ Admin panel
 $(document).ready(function () {
     $('div[class="action"] form').hide();
     $('div[class="action"] h4').click(function () {
-        $('div[class="action"] form').hide('slow');
         $(this).next('form').toggle('slow');
     });
 });
