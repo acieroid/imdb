@@ -35,27 +35,41 @@ $(document).ready(function () {
     <a href="/admin/delete/work/{{ ID }}">Delete</a><br />
     {% end %}
 
-    <h3>Poster</h3>
-    <img src="/poster/{{ title }}/{{ year }}/" alt="Film poster"/>
+    <div id="poster">
+      <img src="/poster/{{ title }}/{{ year }}/" alt="Film poster"/>
+    </div>
 
-    <h3>Rating</h3> 
+    
+    <span class="info">Rating</span>:
       {% if note %} {{ note }}
       {% else %} -
       {% end %}
     /10
+    <br />
 
-    <span id="upvotes">{{ upvotes }}</span>+/
-    <span id="downvotes">{{ downvotes }}</span>-<br/>
-    Vote <a href="#" id="upvote">up</a> or <a href="#" id="downvote">down</a>.
+    <span class="info">Votes</span>:
+    <span id="upvotes">{{ upvotes }}</span><a href="#" id="upvote">+</a>/
+    <span id="downvotes">{{ downvotes }}</span><a href="#" id="downvote">-</a>
+    <br />
 
-    <h3>Genres</h3>
+    <span class="info">Genres</span>:
     {% if genres %}
       {{ ', '.join(genres) }}
     {% else %}
        No genres
     {% end %}
+    <br />
 
-    <h3>Countries</h3>
+    <span class="info">Languages</span>:
+    {% if languages %}
+      {{ ', '.join(languages) }}
+    {% else %}
+      No languages
+    {% end %}
+    <br />
+
+
+    <span class="info">Countries</span>:
     {% if countries %}
       {{ ', '.join(countries) }}<br />
       <img src="/location/{{ ','.join(countries) }}" alt="Film locations"/>
@@ -63,12 +77,6 @@ $(document).ready(function () {
       No countries
     {% end %}
 
-    <h3>Languages</h3>
-    {% if languages %}
-      {{ ', '.join(languages) }}
-    {% else %}
-      No languages
-    {% end %}
 
     <h3>Director(s)</h3>
     {% if directors %}

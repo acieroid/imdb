@@ -1,3 +1,19 @@
+body {
+    font-family: Liberation Sans;
+}
+
+h1 {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 #search, #search_submit {
     border-radius: 5px;
     height: 45px;
@@ -24,9 +40,19 @@
     font-size: 70%;
 }
 
-a {
-    text-decoration: none;
+#poster {
+    float: left;
+    margin-right: 15px;
 }
-a:hover {
-    text-decoration: underline;
+
+#upvotes {
+    color: #3E5;
+}
+
+#downvotes {
+    color: #E35;
+}
+
+.info {
+    font-weight: bold;
 }
