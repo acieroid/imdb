@@ -1,6 +1,7 @@
 import tornado.ioloop
 import tornado.web
 import tornado.template
+from tornado.escape import xhtml_unescape as unescape
 import sqlite3
 import ply.lex
 import ply.yacc
@@ -17,27 +18,20 @@ class QueryError(Exception):
 tokens = (
     'OPERATOR',
     'COMPARATOR',
-    'CONTAINER',
-    'CONTAINER_OP',
     'IDENTIFIER',
     'SORT',
     'VALUE',
     'LPAREN',
     'RPAREN',
-    'LBRACE',
-    'RBRACE',
     'SPACE',
 )
 
 precedence = (
     ('left', 'SORT'),
-    ('left', 'CONTAINER_OP'),
     ('left', 'OPERATOR'),
 )
 
 t_OPERATOR = r'(and|or)'
-t_CONTAINER_OP = r'(;|,)'
-t_CONTAINER = r'contains'
 t_SORT = r'sort(\+|\-)'
 t_COMPARATOR = r'(>=|<=|<|>|==|=~)'
 t_IDENTIFIER = r'[A-Z][a-zA-Z_]+'
@@ -50,8 +44,6 @@ def t_VALUE(t):
     return t
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
-t_LBRACE = r'\{'
-t_RBRACE = r'\}'
 t_ignore_SPACE = r'\s+'
 
 def t_error(t):
@@ -78,22 +70,6 @@ def p_op(p):
 def p_comp(p):
     'condition : IDENTIFIER COMPARATOR VALUE'
     p[0] = [p[2], p[1], p[3]]
-
-def p_cont(p):
-    'condition : IDENTIFIER CONTAINER container'
-    p[0] = [p[2], p[1], p[3]]
-
-def p_container_op(p):
-    'container : LBRACE container_content RBRACE'
-    p[0] = p[2]
-
-def p_container_content_op(p):
-    'container_content : condition CONTAINER_OP condition'
-    p[0] = [p[2], p[1], p[3]]
-
-def p_container_content(p):
-    'container_content : condition'
-    p[0] = p[1]
 
 def p_error(p):
     raise QueryError('syntax error at "%s"' % p.value)
@@ -204,7 +180,7 @@ def convert(l):
         if satisfies(l, lambda x: not valid_var('Movie', x)):
             raise QueryError('Query contains invalid variable for movie')
         res = combine(('select W.ID from Work W where ', []), '', helper(l))
-        t = 'Movie'
+        t = 'Work'
 
     if sort:
         if simple_identifier(sort_var):
@@ -222,25 +198,33 @@ def convert(l):
     return (res, t)
 
 # Page
-class Search(BasePage):
-    def get(self):
+class SearchResults(BasePage):
+    def get(self, search):
         loader = tornado.template.Loader('templates/')
-        
-        conn = sqlite3.connect('db.sqlite')
-        cur = conn.cursor()
         
         # parse the query
         try:
-            parsed = ply.yacc.parse(self.get_argument('search', ''))
+            parsed = ply.yacc.parse(unescape(search))
             ((query, args), typeofdata) = convert(parsed)
             
             # execute the query
+            conn = sqlite3.connect('db.sqlite')
+            cur = conn.cursor()
             cur.execute(query, *(args,))
             results = cur.fetchall()
             
             cur.close()
             
-            self.write(loader.load('search.html').generate(results=results,
-                                                           typeofdata=typeofdata))
+            self.write(loader.load('search_results.html').generate(results=results,
+                                                                   typeofdata=typeofdata))
         except QueryError as e:
-            self.error('Your query was incorrect: %s' % e.message)
+            self.write('Your query was incorrect: %s' % e.message)
+
+class Search(BasePage):
+    def get(self):
+        loader = tornado.template.Loader('templates/')
+        query = self.get_argument('search', '')
+        if query == '':
+            self.error('Your query was empty')
+        else:
+            self.write(loader.load('search.html').generate(query=query))

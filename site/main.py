@@ -8,6 +8,7 @@ import pages
 application = tornado.web.Application([
     (r'/', pages.Main),
     (r'/search', pages.Search),
+    (r'/search_results/(.*)', pages.SearchResults),
     (r'/movie/(.*)', pages.Movie),
     (r'/serie/(.*)', pages.Serie),
     (r'/person/(.+)/(.+)/(.*)', pages.Person),
@@ -30,4 +31,5 @@ application = tornado.web.Application([
 
 if __name__ == '__main__':
     application.listen(8888)
+    application.debug = True
     tornado.ioloop.IOLoop.instance().start()

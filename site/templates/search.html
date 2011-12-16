@@ -4,32 +4,16 @@
 Search
 {% end %}
 
-{% block body %}
-{% import utils %}
-Your query searched among {{ typeofdata.lower() }}s.<br/>
-{% if results %}
-  The results are:
-  <ul>
-    {% if typeofdata == 'Movie' %}
-      {% for (ID,) in results %}
-        <li>{% raw utils.work_link(ID) %}</li>
-      {% end %}
-    {% elif typeofdata == 'Serie' %}
-      {% for (ID,) in results %}
-        <li>{% raw utils.work_link(ID) %}</li>
-      {% end %}
-    {% elif typeofdata == 'Episode' %}
-      {% for (ID,) in results %}
-        <li>{% raw utils.work_link(ID) %}</li>
-      {% end %}
-    {% elif typeofdata == 'Person' %}
-      {% for (fname, lname, num) in results %}
-        <li><a href="/person/{{ fname }}/{{ lname }}/{{ num }}">
-            {{ fname }}, {{ lname }} {% if num != '' %} ({{num}}) {% end %}</li>
-      {% end %}
-    {% end %}
-  </ul>
-{% else %}
-  Unfortunately, your query didn't returned any result.
+{% block javascript %}
+$(document).ready(function () {
+  $.get('/search_results/{{ query }}', function (data) {
+    $('#results').html(data);
+  });
+});
 {% end %}
+
+{% block body %}
+<div id="results">
+Searching...
+</div>
 {% end %}
