@@ -14,6 +14,14 @@ a:hover {
     text-decoration: underline;
 }
 
+.info {
+    font-weight: bold;
+}
+
+.centered {
+    text-align: center;
+}
+
 #search, #search_submit {
     border-radius: 5px;
     height: 45px;
@@ -51,8 +59,4 @@ a:hover {
 
 #downvotes {
     color: #E35;
-}
-
-.info {
-    font-weight: bold;
 }
