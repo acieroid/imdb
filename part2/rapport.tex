@@ -164,19 +164,13 @@ select FirstName, LastName, Num from Actor where
 
     \end{lstlisting}
   \item R2 :
-% lolwat :(
     \begin{lstlisting}
-select W1.FirstName, W1.LastName, W1.Num
-  from Writer W1, Writer W2
-  where W1.FirstName = W2.FirstName 
-    and W1.LastName = W2.LastName
-    and W1.Num = W2.Num
-    and count(select * from Work Work1, Work Work2, Movie M1, MovieM2 
-                where W1.ID = M1.ID
-                  and W2.ID = M2.ID
-                  and W1.ID != W2.ID
-                  and Work1.ID = M1.ID
-                  and Work2.ID = M2.ID) >= 2
+select distinct FirstName, LastName, Num
+  from Writer, Movie, Work
+  where Writer.ID=Movie.ID and Work.ID=Movie.ID
+  group by FirstName, LastName, Num, Year
+  having count(Writer.ID) >= 2
+    
     \end{lstlisting}
   \item R3 :
     \begin{lstlisting}
@@ -204,6 +198,11 @@ select ID from Episode
     \end{lstlisting}
   \item R5 :
     \begin{lstlisting}
+selecy FirstName, LastName, Num, count(*) as compteur
+  from Actor, Serie
+  where Actor.ID=Serie.ID
+  group by FirstName,LastName,Num
+  order by compteur DESC
     \end{lstlisting}
   \item R6 :
     \begin{lstlisting}
