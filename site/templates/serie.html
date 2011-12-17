@@ -51,9 +51,9 @@ $(document).ready(function(){
         <h4>Season {{ season }}</h4>
         <ul>
         {% end %}
-            <li><a href="/episode/{{ epID }}">
+            <li><a href="/episode/{% raw url_escape(epID) %}">
                 {{ numE }}. {{ title }}</a>
-              {% if admin %}(<a href="/admin/delete/work/{{ ID }}">delete</a>){% end %}
+              {% if admin %}(<a href="/admin/delete/work/{% raw url_escape(epID) %}">delete</a>){% end %}
             </li>
         {% set (seasonP) = season %}
     {% end %}

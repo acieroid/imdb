@@ -51,13 +51,13 @@ class Episode(BasePage):
             cur.close()
             
             self.write(loader.load('episode.html').generate(episode=episode,
-                                                          ID=episode_id,
-                                                          actors=actors,
-                                                          directors=directors,
-                                                          writers=writers,
-                                                          countries=countries,
-                                                          languages=languages,
-                                                          genres=genres,
-                                                          admin=admin))
+                                                            ID=episode_id,
+                                                            actors=actors,
+                                                            directors=directors,
+                                                            writers=writers,
+                                                            countries=countries,
+                                                            languages=languages,
+                                                            genres=genres,
+                                                            admin=admin))
         else:
-            self.error('Episode \'%s\' not found', episode_id)
+            self.error('Episode \'%s\' not found' % episode_id)
