@@ -2,6 +2,9 @@
   <head>
     <title>{% block title %}IMDB{% end %}</title>
     <link rel="stylesheet" type="text/css" href="/static/style.css" />
+    <style type="text/css">
+      {% block css %} {% end %}
+    </style>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript">
       {% block javascript %} {% end %}

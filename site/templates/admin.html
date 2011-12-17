@@ -13,240 +13,263 @@ $(document).ready(function () {
 });
 {% end %}
 
+{% block css %}
+#admin_stuff {
+    float: left;
+    width: 35%;
+    height: 100%;
+}
+#add_stuff {
+    margin-left: 35%;
+    margin-right: 35%;
+}
+#delete_stuff {
+    float: right;
+    width: 20%;
+}
+{% end %}
+
 {% block body %}
 <h1>Admin panel</h1>
-You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).
+<div class="centered">You are connected as {{ mail }} (<a href="/admin/logout">disconnect</a>).</div>
 
-<div class="action">
-<h4>Add an admin</h4>
-<form action="/admin/add" method="post">
-  <label control="mail">Mail: </label>
-  <input type="text" name="mail" id="mail" /><br />
-  <label control="password">Password: </label>
-  <input type="password" name="password" id="password" /><br />
+<div id="admin_stuff">
+  <div class="action">
+    <h4>Add an admin</h4>
+    <form action="/admin/add" method="post">
+      <label control="mail">Mail: </label>
+      <input type="text" name="mail" id="mail" /><br />
+      <label control="password">Password: </label>
+      <input type="password" name="password" id="password" /><br />
 
-  <input type="submit" value="Add" />
-</form>
+      <input type="submit" value="Add" />
+    </form>
+  </div>
+
+  <div class="action">
+    <h4>Delete an admin</h4>
+    <form action="/admin/delete" method="post">
+      <label control="mail">Mail: </label>
+      <input type="text" name="mail" id="mail" /><br />
+
+      <input type="submit" value="Delete" />
+    </form>
+  </div>
 </div>
 
-<div class="action">
-<h4>Delete an admin</h4>
-<form action="/admin/delete" method="post">
-  <label control="mail">Mail: </label>
-  <input type="text" name="mail" id="mail" /><br />
 
-  <input type="submit" value="Delete" />
-</form>
+<div id="delete_stuff">
+  <div class="action">
+    <h4>Delete a genre</h4>
+    <form action="/admin/delete/genre" method="post">
+      <label control="id">Work ID: </label>
+      <input type="text" name="id" id="id" /><br />
+
+      <label control="genre">Genre: </label>
+      <input type="text" name="genre" id="genre" /><br />
+
+      <input type="submit" value="Delete" />
+    </form>
+  </div>
+
+  <div class="action">
+    <h4>Delete a country</h4>
+    <form action="/admin/delete/country" method="post">
+      <label control="id">Work ID: </label>
+      <input type="text" name="id" id="id" /><br />
+
+      <label control="country">Country: </label>
+      <input type="text" name="country" id="country" /><br />
+
+      <input type="submit" value="Delete" />
+    </form>
+  </div>
+
+  <div class="action">
+    <h4>Delete a language</h4>
+    <form action="/admin/delete/language" method="post">
+      <label control="id">Work ID: </label>
+      <input type="text" name="id" id="id" /><br />
+
+      <label control="language">Language: </label>
+      <input type="text" name="language" id="language" /><br />
+
+      <input type="submit" value="Delete" />
+    </form>
+  </div>
 </div>
 
-<div class="action">
-<h4>Add a movie</h4>
-<form action="/admin/add/movie" method="post">
-  <label control="title">Title: </label>
-  <input type="text" name="title" id="title" /><br />
-  
-  <label control="year">Year: </label>
-  <input type="text" name="year" id="year" /><br />
+<div class="add_stuff">
+  <div class="action">
+    <h4>Add a movie</h4>
+    <form action="/admin/add/movie" method="post">
+      <label control="title">Title: </label>
+      <input type="text" name="title" id="title" /><br />
+      
+      <label control="year">Year: </label>
+      <input type="text" name="year" id="year" /><br />
 
-  <label control="note">Note: </label>
-  <input type="text" name="note" id="note" /><br />
+      <label control="note">Note: </label>
+      <input type="text" name="note" id="note" /><br />
 
-  <input type="submit" value="Add" />
-</form>
-</div>
+      <input type="submit" value="Add" />
+    </form>
+  </div>
 
-<div class="action">
-<h4>Add a serie</h4>
-<form action="/admin/add/serie" method="post">
-  <label control="title">Title: </label>
-  <input type="text" name="title" id="title" /><br />
-  
-  <label control="year">Year: </label>
-  <input type="text" name="year" id="year" /><br />
+  <div class="action">
+    <h4>Add a serie</h4>
+    <form action="/admin/add/serie" method="post">
+      <label control="title">Title: </label>
+      <input type="text" name="title" id="title" /><br />
+      
+      <label control="year">Year: </label>
+      <input type="text" name="year" id="year" /><br />
 
-  <label control="end_year">End year: </label>
-  <input type="text" name="end_year" id="end_year" /><br />
+      <label control="end_year">End year: </label>
+      <input type="text" name="end_year" id="end_year" /><br />
 
-  <label control="note">Note: </label>
-  <input type="text" name="note" id="note" /><br />
+      <label control="note">Note: </label>
+      <input type="text" name="note" id="note" /><br />
 
-  <input type="submit" value="Add" />
-</form>
-</div>
+      <input type="submit" value="Add" />
+    </form>
+  </div>
 
-<div class="action">
-<h4>Add an episode</h4>
-<form action="/admin/add/episode" method="post">
-  <label control="title">Serie title: </label>
-  <input type="text" name="title" id="title" /><br />
-  
-  <label control="year">Serie year: </label>
-  <input type="text" name="year" id="year" /><br />
+  <div class="action">
+    <h4>Add an episode</h4>
+    <form action="/admin/add/episode" method="post">
+      <label control="title">Serie title: </label>
+      <input type="text" name="title" id="title" /><br />
+      
+      <label control="year">Serie year: </label>
+      <input type="text" name="year" id="year" /><br />
 
-  <label control="date">Episode year: </label>
-  <input type="text" name="date" id="date" /><br />
+      <label control="date">Episode year: </label>
+      <input type="text" name="date" id="date" /><br />
 
-  <label control="season">Season: </label>
-  <input type="text" name="season" id="season" /><br />
+      <label control="season">Season: </label>
+      <input type="text" name="season" id="season" /><br />
 
-  <label control="epi_num">Episode number: </label>
-  <input type="text" name="epi_num" id="epi_num" /><br />
+      <label control="epi_num">Episode number: </label>
+      <input type="text" name="epi_num" id="epi_num" /><br />
 
-  <label control="epi_title">Episode title: </label>
-  <input type="text" name="epi_title" id="epi_title" /><br />
+      <label control="epi_title">Episode title: </label>
+      <input type="text" name="epi_title" id="epi_title" /><br />
 
-  <label control="note">Episode note: </label>
-  <input type="text" name="note" id="note" /><br />
+      <label control="note">Episode note: </label>
+      <input type="text" name="note" id="note" /><br />
 
-  <input type="submit" value="Add" />
-</form>
-</div>
+      <input type="submit" value="Add" />
+    </form>
+  </div>
 
-<div class="action">
-<h4>Add a director</h4>
-<form action="/admin/add/director" method="post">
-  <label control="id">Work ID: </label>
-  <input type="text" name="id" id="id" /><br />
+  <div class="action">
+    <h4>Add a director</h4>
+    <form action="/admin/add/director" method="post">
+      <label control="id">Work ID: </label>
+      <input type="text" name="id" id="id" /><br />
 
-  <label control="fname">First name: </label>
-  <input type="text" name="fname" id="fname" /><br />
+      <label control="fname">First name: </label>
+      <input type="text" name="fname" id="fname" /><br />
 
-  <label control="lname">Last name: </label>
-  <input type="text" name="lname" id="lname" /><br />
+      <label control="lname">Last name: </label>
+      <input type="text" name="lname" id="lname" /><br />
 
-  <label control="num">Number: </label>
-  <input type="text" name="num" id="num" /><br />
+      <label control="num">Number: </label>
+      <input type="text" name="num" id="num" /><br />
 
-  <label control="gender">Gender: </label>
-  <input type="text" name="gender" id="gender" /> (leave blank if person already exists)<br />
+      <label control="gender">Gender: </label>
+      <input type="text" name="gender" id="gender" /> (leave blank if person already exists)<br />
 
-  <input type="submit" value="Add" />
-</form>
-</div>
+      <input type="submit" value="Add" />
+    </form>
+  </div>
 
-<div class="action">
-<h4>Add a writer</h4>
-<form action="/admin/add/writer" method="post">
-  <label control="id">Work ID: </label>
-  <input type="text" name="id" id="id" /><br />
+  <div class="action">
+    <h4>Add a writer</h4>
+    <form action="/admin/add/writer" method="post">
+      <label control="id">Work ID: </label>
+      <input type="text" name="id" id="id" /><br />
 
-  <label control="fname">First name: </label>
-  <input type="text" name="fname" id="fname" /><br />
+      <label control="fname">First name: </label>
+      <input type="text" name="fname" id="fname" /><br />
 
-  <label control="lname">Last name: </label>
-  <input type="text" name="lname" id="lname" /><br />
+      <label control="lname">Last name: </label>
+      <input type="text" name="lname" id="lname" /><br />
 
-  <label control="num">Number: </label>
-  <input type="text" name="num" id="num" /><br />
+      <label control="num">Number: </label>
+      <input type="text" name="num" id="num" /><br />
 
-  <label control="gender">Gender: </label>
-  <input type="text" name="gender" id="gender" /> (leave blank if person already exists)<br />
+      <label control="gender">Gender: </label>
+      <input type="text" name="gender" id="gender" /> (leave blank if person already exists)<br />
 
-  <input type="submit" value="Add" />
-</form>
-</div>
+      <input type="submit" value="Add" />
+    </form>
+  </div>
 
-<div class="action">
-<h4>Add an actor</h4>
-<form action="/admin/add/actor" method="post">
-  <label control="id">Work ID: </label>
-  <input type="text" name="id" id="id" /><br />
+  <div class="action">
+    <h4>Add an actor</h4>
+    <form action="/admin/add/actor" method="post">
+      <label control="id">Work ID: </label>
+      <input type="text" name="id" id="id" /><br />
 
-  <label control="role">Role: </label>
-  <input type="text" name="role" id="role" /><br />
+      <label control="role">Role: </label>
+      <input type="text" name="role" id="role" /><br />
 
-  <label control="fname">First name: </label>
-  <input type="text" name="fname" id="fname" /><br />
+      <label control="fname">First name: </label>
+      <input type="text" name="fname" id="fname" /><br />
 
-  <label control="lname">Last name: </label>
-  <input type="text" name="lname" id="lname" /><br />
+      <label control="lname">Last name: </label>
+      <input type="text" name="lname" id="lname" /><br />
 
-  <label control="num">Number: </label>
-  <input type="text" name="num" id="num" /><br />
+      <label control="num">Number: </label>
+      <input type="text" name="num" id="num" /><br />
 
-  <label control="gender">Gender: </label>
-  <input type="text" name="gender" id="gender" /> (leave blank if person already exists)<br />
+      <label control="gender">Gender: </label>
+      <input type="text" name="gender" id="gender" /> (leave blank if person already exists)<br />
 
-  <input type="submit" value="Add" />
-</form>
-</div>
+      <input type="submit" value="Add" />
+    </form>
+  </div>
 
-<div class="action">
-<h4>Add a genre</h4>
-<form action="/admin/add/genre" method="post">
-  <label control="id">Work ID: </label>
-  <input type="text" name="id" id="id" /><br />
+  <div class="action">
+    <h4>Add a genre</h4>
+    <form action="/admin/add/genre" method="post">
+      <label control="id">Work ID: </label>
+      <input type="text" name="id" id="id" /><br />
 
-  <label control="genre">Genre: </label>
-  <input type="text" name="genre" id="genre" /><br />
+      <label control="genre">Genre: </label>
+      <input type="text" name="genre" id="genre" /><br />
 
-  <input type="submit" value="Add" />
-</form>
-</div>
+      <input type="submit" value="Add" />
+    </form>
+  </div>
 
-<div class="action">
-<h4>Add a country</h4>
-<form action="/admin/add/country" method="post">
-  <label control="id">Work ID: </label>
-  <input type="text" name="id" id="id" /><br />
+  <div class="action">
+    <h4>Add a country</h4>
+    <form action="/admin/add/country" method="post">
+      <label control="id">Work ID: </label>
+      <input type="text" name="id" id="id" /><br />
 
-  <label control="country">Country: </label>
-  <input type="text" name="country" id="country" /><br />
+      <label control="country">Country: </label>
+      <input type="text" name="country" id="country" /><br />
 
-  <input type="submit" value="Add" />
-</form>
-</div>
+      <input type="submit" value="Add" />
+    </form>
+  </div>
 
-<div class="action">
-<h4>Add a language</h4>
-<form action="/admin/add/language" method="post">
-  <label control="id">Work ID: </label>
-  <input type="text" name="id" id="id" /><br />
+  <div class="action">
+    <h4>Add a language</h4>
+    <form action="/admin/add/language" method="post">
+      <label control="id">Work ID: </label>
+      <input type="text" name="id" id="id" /><br />
 
-  <label control="language">Language: </label>
-  <input type="text" name="language" id="language" /><br />
+      <label control="language">Language: </label>
+      <input type="text" name="language" id="language" /><br />
 
-  <input type="submit" value="Add" />
-</form>
-</div>
-
-<div class="action">
-<h4>Delete a genre</h4>
-<form action="/admin/delete/genre" method="post">
-  <label control="id">Work ID: </label>
-  <input type="text" name="id" id="id" /><br />
-
-  <label control="genre">Genre: </label>
-  <input type="text" name="genre" id="genre" /><br />
-
-  <input type="submit" value="Delete" />
-</form>
-</div>
-
-<div class="action">
-<h4>Delete a country</h4>
-<form action="/admin/delete/country" method="post">
-  <label control="id">Work ID: </label>
-  <input type="text" name="id" id="id" /><br />
-
-  <label control="country">Country: </label>
-  <input type="text" name="country" id="country" /><br />
-
-  <input type="submit" value="Delete" />
-</form>
-</div>
-
-<div class="action">
-<h4>Delete a language</h4>
-<form action="/admin/delete/language" method="post">
-  <label control="id">Work ID: </label>
-  <input type="text" name="id" id="id" /><br />
-
-  <label control="language">Language: </label>
-  <input type="text" name="language" id="language" /><br />
-
-  <input type="submit" value="Delete" />
-</form>
+      <input type="submit" value="Add" />
+    </form>
+  </div>
 </div>
 
 {% end %}
