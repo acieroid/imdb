@@ -30,7 +30,6 @@ create table Episode (
        foreign key (ID) references Work(ID)
        foreign key (SID) references Serie(ID)
 );
-create index EpisodeID on Episode(SID);
 
 create table Genre (
        ID varchar(512) not null ,
@@ -71,7 +70,6 @@ create table Actor (
        foreign key (FirstName, LastName, Num) references Person(FirstName, LastName, Num),
        foreign key (ID) references Work(ID)
 );
-create index ActorID on Actor(ID);
 
 create table Writer (
        FirstName varchar(256) not null,
@@ -82,7 +80,6 @@ create table Writer (
        foreign key (FirstName, LastName, Num) references Person(FirstName, LastName, Num),
        foreign key (ID) references Work(ID)
 );
-create index WriterID on Writer(ID);
 
 create table Director (
        FirstName varchar(256) not null,
@@ -93,7 +90,6 @@ create table Director (
        foreign key (FirstName, LastName, Num) references Person(FirstName, LastName, Num),
        foreign key (ID) references Work(ID)
 );
-create index DirectorID on Director(ID);
 
 create table Admin (
        Mail varchar(256) not null,
