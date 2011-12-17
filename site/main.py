@@ -18,6 +18,7 @@ application = tornado.web.Application([
     (r'/search_results/(.*)', pages.SearchResults),
     (r'/movie/(.*)', pages.Movie),
     (r'/serie/(.*)', pages.Serie),
+    (r'/episode/(.*)', pages.Episode),
     (r'/person/(.+)/(.+)/(.*)', pages.Person),
     (r'/poster/(.+)/(.+)', pages.Poster),
     (r'/location/(.+)', pages.Location),
