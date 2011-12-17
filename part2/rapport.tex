@@ -198,7 +198,7 @@ select ID from Episode
     \end{lstlisting}
   \item R5 :
     \begin{lstlisting}
-selecy FirstName, LastName, Num, count(*) as compteur
+select FirstName, LastName, Num, count(*) as compteur
   from Actor, Serie
   where Actor.ID=Serie.ID
   group by FirstName,LastName,Num
