@@ -369,7 +369,6 @@ sub quit {
 
 sub import_everything {
     $dbh->do("begin transaction");
-    $dbh->do("pragma synchronous = off");
     $dbh->do("pragma journal_mode = off");
     import_movies;
     import_ratings;
