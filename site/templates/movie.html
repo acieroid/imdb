@@ -6,10 +6,15 @@ Movie: {{ title }} ({{ year }})
 {% end %}
 
 {% block css %}
+#infos {
+    padding: 0 0 0 330px;
+    position: relative;
+    height: 500px;
+}
 #poster {
-    float: left;
-    margin-left: 10px;
-    margin-right: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 {% end %}
 
