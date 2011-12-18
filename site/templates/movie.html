@@ -58,7 +58,7 @@ $(document).ready(function () {
 
     <div id="infos">
       <div id="poster">
-        <img src="/poster/{{ title }}/{{ year }}/" alt="Film poster"/>
+        <img src="/poster/{% raw url_escape(title) %}/{{ year }}/" alt="Film poster"/>
       </div>
 
     

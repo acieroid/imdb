@@ -23,7 +23,7 @@ $(document).ready(function(){
     {% end %}
 
     <h3>Poster</h3>
-    <img src="/poster/{% raw url_escape(title) %}/{% raw url_escape(year) %}/" alt="Serie poster"/>
+    <img src="/poster/{% raw url_escape(title) %}/{{ year }}/" alt="Serie poster"/>
 
     <h3>Rating</h3> 
       {% if note %} {{ note }}
