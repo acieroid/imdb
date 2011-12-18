@@ -22,6 +22,10 @@ a:hover {
     text-align: center;
 }
 
+.grey {
+    color: #777;
+}
+
 #search, #search_submit {
     border-radius: 5px;
     height: 45px;
@@ -51,6 +55,7 @@ a:hover {
 #poster {
     float: left;
     margin-right: 15px;
+    height: 100%;
 }
 
 #upvotes {

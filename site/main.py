@@ -8,7 +8,6 @@ import pages
 settings = {
     'static_path': os.path.join(os.path.dirname(__file__), 'static'),
     'cookie_secret': 'N53gLGkySeCvX5AjgUgmtAez7L8JhUP2hb+MYgizGWo=',
-    'xsrf_cookies': True,
     'debug': True
 }
 
