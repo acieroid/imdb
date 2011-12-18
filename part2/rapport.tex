@@ -17,7 +17,7 @@
   linkcolor=black,
   urlcolor=black
 }
-\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage[top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
 %\renewcommand{\baselinestretch}{1.05}
 
 \usepackage{listings}
@@ -45,10 +45,72 @@ tabsize=2,
 \HRule
 
 \section{Modèle entité-association}
-% TODO: refaire le schéma qu'ils ont rendu avec dia/inkscape
+
+\begin{figure}[ht!]
+  \centering
+  \centerline{\includegraphics[width=1.1\textwidth]{er.png}}
+\end{figure}
+
 \subsection{Contraintes d'intégrité}
+\begin{list}{-}{}
+  \item L'année de fin d'une série doit être supérieure à son année de début.
+\end{list}
 \section{Modèle relationnel}
-% TODO: simplement une réécriture du create.sql
+Work(\underline{ID}, Title, Year, Note)
+
+Movie(\underline{ID})
+\begin{list}{-}{}
+  \item ID représente Work.ID
+\end{list}
+
+Serie(\underline{ID}, EndYear)
+\begin{list}{-}{}
+  \item ID représente Work.ID
+\end{list}
+
+Episode(\underline{ID}, Season, EpisodeNum, Date, EpisodeTitle, SID)
+\begin{list}{-}{}
+  \item ID représente Work.ID
+  \item ID représente Serie.ID
+\end{list}
+
+Genre(\underline{ID, Genre})
+\begin{list}{-}{}
+  \item ID représente Work.ID
+\end{list}
+
+Country(\underline{ID, Country})
+\begin{list}{-}{}
+  \item ID représente Work.ID
+\end{list}
+
+Person(\underline{FirstName, LastName, Num}, Gender)
+
+Actor(\underline{FirstName, LastName, Num, Role}, ID)
+\begin{list}{-}{}
+  \item FirstName représente Person.FirstName
+  \item LastName représente Person.LastName
+  \item Num représente Person.Num
+  \item ID représente Work.ID
+\end{list}
+
+Writer(\underline{FirstName, LastName, Num}, ID)
+\begin{list}{-}{}
+  \item FirstName représente Person.FirstName
+  \item LastName représente Person.LastName
+  \item Num représente Person.Num
+  \item ID représente Work.ID
+\end{list}
+
+Director(\underline{FirstName, LastName, Num}, ID)
+\begin{list}{-}{}
+  \item FirstName représente Person.FirstName
+  \item LastName représente Person.LastName
+  \item Num représente Person.Num
+  \item ID représente Work.ID
+\end{list}
+
+Admin(\underline{Mail}, Password)
 \section{Méthode d'extraction des données}
 Pour extraire les données depuis les fichiers d'\emph{IMDB}, Perl a
 été choisi, grâce à la faciliter d'écrire des programmes manipulant du
