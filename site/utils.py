@@ -51,7 +51,7 @@ def person_info(t, person, ID, admin):
            (url_escape(fname), url_escape(lname), url_escape(num),
             url_escape(fname), url_escape(lname)))
     if admin:
-        res += (' (<a href="/admin/delete/%s/%s/%s/%s/%s">delete</a>)',
+        res += (' (<a href="/admin/delete/%s/%s/%s/%s/%s">delete</a>)' %
                 (t, url_escape(fname), url_escape(lname), url_escape(num),
                  url_escape(ID)))
     return res
