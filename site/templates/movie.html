@@ -5,6 +5,20 @@
 Movie: {{ title }} ({{ year }})
 {% end %}
 
+{% block css %}
+#infos {
+    padding: 0 0 0 28%;
+    position: relative;
+}
+
+#infos img {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+{% end %}
+
 {% block javascript %}
 $(document).ready(function () {
     $('#upvote').click(function (e) {
@@ -38,50 +52,54 @@ $(document).ready(function () {
     <h1>{{ title }} ({{ year }})</h1>
 
     {% if admin %}
-    <a href="/admin/delete/work/{{ ID }}">Delete</a><br />
+    <div class="centered">
+    <a href="/admin/delete/work/{{ ID }}">Delete</a>
+    </div>
     {% end %}
 
-    <div id="poster">
-      <img src="/poster/{{ title }}/{{ year }}/" alt="Film poster"/>
-    </div>
+    <div id="infos">
+      <div id="poster">
+        <img src="/poster/{{ title }}/{{ year }}/" alt="Film poster"/>
+      </div>
 
     
-    <span class="info">Rating</span>:
-      {% if note %} {{ note }}
-      {% else %} -
+      <span class="info">Rating</span>:
+        {% if note %} {{ note }}
+        {% else %} <span class="grey">-</span>
+        {% end %}
+      /10
+      <br />
+
+      <span class="info">Votes</span>:
+      <span id="upvotes">{{ upvotes }}</span><a href="#" id="upvote">+</a>/
+      <span id="downvotes">{{ downvotes }}</span><a href="#" id="downvote">-</a>
+      <br />
+
+      <span class="info">Genres</span>:
+      {% if genres %}
+        {{ ', '.join(genres) }}
+      {% else %}
+         <span class="grey">No genres</span>
       {% end %}
-    /10
-    <br />
+      <br />
 
-    <span class="info">Votes</span>:
-    <span id="upvotes">{{ upvotes }}</span><a href="#" id="upvote">+</a>/
-    <span id="downvotes">{{ downvotes }}</span><a href="#" id="downvote">-</a>
-    <br />
-
-    <span class="info">Genres</span>:
-    {% if genres %}
-      {{ ', '.join(genres) }}
-    {% else %}
-       No genres
-    {% end %}
-    <br />
-
-    <span class="info">Languages</span>:
-    {% if languages %}
-      {{ ', '.join(languages) }}
-    {% else %}
-      No languages
-    {% end %}
-    <br />
+      <span class="info">Languages</span>:
+      {% if languages %}
+        {{ ', '.join(languages) }}
+      {% else %}
+        <span class="grey">No languages</span>
+      {% end %}
+      <br />
 
 
-    <span class="info">Countries</span>:
-    {% if countries %}
-      {{ ', '.join(countries) }}. <a href="#" id="locate">Show map</a><br /> 
-      <img src="/location/{{ ','.join(countries) }}" alt="Film locations" id="location"/>
-    {% else %}
-      No countries
-    {% end %}
+      <span class="info">Countries</span>:
+      {% if countries %}
+        {{ ', '.join(countries) }}. <a href="#" id="locate">Show map</a><br /> 
+        <img src="/location/{{ ','.join(countries) }}" alt="Film locations" id="location"/>
+      {% else %}
+        <span class="grey">No countries</span>
+      {% end %}
+    </div>
 
 
     <h3>Director(s)</h3>
@@ -95,7 +113,7 @@ $(document).ready(function () {
         {% end %}
       </ul>
     {% else %}
-      No director
+      <span class="grey">No director</span>
     {% end %}
 
     <h3>Writer(s)</h3>
@@ -109,7 +127,7 @@ $(document).ready(function () {
         {% end %}
       </ul>
     {% else %}
-      No writer
+      <span class="grey">No writer</span>
     {% end %}
 
     <h3>Actors</h3>
@@ -123,6 +141,6 @@ $(document).ready(function () {
         {% end %}
       </ul>
     {% else %}
-      No actor
+      <span class="grey">No actor</span>
     {% end %}
 {% end %}

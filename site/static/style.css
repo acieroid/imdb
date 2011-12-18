@@ -52,12 +52,6 @@ a:hover {
     font-size: 70%;
 }
 
-#poster {
-    float: left;
-    margin-right: 15px;
-    height: 100%;
-}
-
 #upvotes {
     color: #3E5;
 }
