@@ -1,4 +1,5 @@
 from tornado.escape import xhtml_escape as escape
+from tornado.escape import url_escape
 import re
 
 def work_link(ID):
@@ -10,7 +11,7 @@ def work_link(ID):
         if res:
             title = escape(res.group(1))
             year = escape(res.group(2))
-            return ('<a href="/movie/%s">%s (%s)</a>' % (escape(ID), title, year))
+            return ('<a href="/movie/%s">%s (%s)</a>' % (url_escape(ID), title, year))
         else:
             return ('Invalid movie ID: %s' % escape(ID))
     elif ID.find('{') != -1:
@@ -22,7 +23,7 @@ def work_link(ID):
             epi_name = escape(res.group(3))
             season = escape(res.group(4))
             epi_num = escape(res.group(5))
-            return ('<a href="/episode/%s">%s (%s) %sx%s: %s</a>' % (escape(ID), title, year, season, epi_num, epi_name))
+            return ('<a href="/episode/%s">%s (%s) %sx%s: %s</a>' % (url_escape(ID), title, year, season, epi_num, epi_name))
         else:
             return ('Invalid episode ID: %s' % escape(ID))
     else:
@@ -31,7 +32,7 @@ def work_link(ID):
         if res:
             title = escape(res.group(1))
             year = escape(res.group(2))
-            return ('<a href="/serie/%s">%s (%s)</a>' % (escape(ID), title, year))
+            return ('<a href="/serie/%s">%s (%s)</a>' % (url_escape(ID), title, year))
         else:
             return ('Invalid serie ID: %s' % escape(ID))
 

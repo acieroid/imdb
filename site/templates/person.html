@@ -28,7 +28,7 @@
 <h1>{{ fname }} {{ lname }} {% if num %} ({{ num }}) {% end %}</h1>
 
 {% if admin %}
-<a href="/admin/delete/person/{{ fname }}/{{ lname }}/{{ num }}">Delete</a><br/>
+<a href="/admin/delete/person/{% raw url_escape(fname) %}/{% raw url_escape(lname) %}/{% raw url_escape(num) %}">Delete</a><br/>
 {% end %}
 
 <div class="centered">

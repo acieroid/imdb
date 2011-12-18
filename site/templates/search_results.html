@@ -17,7 +17,7 @@ Your query searched among {{ typeofdata.lower() }}s.<br/>
       {% end %}
     {% elif typeofdata == 'Person' %}
       {% for (fname, lname, num) in results %}
-        <li><a href="/person/{{ fname }}/{{ lname }}/{{ num }}">
+        <li><a href="/person/{% raw url_escape(fname) %}/{% raw url_escape(lname) %}/{% raw url_escape(num) %}">
             {{ fname }}, {{ lname }} {% if num != '' %} ({{num}}) {% end %}</li>
       {% end %}
     {% end %}

@@ -9,12 +9,12 @@
 {% block body %}
 {% set (stitle, syear, snote, season, episodenum, date, etitle, SID) = episode %}
     <h1>{{ etitle }}</h1>
-    Serie : <a href="/serie/{{ SID }}">{{ stitle }}</a>
+    Serie : <a href="/serie/{{ SID }}">{% raw url_escape(stitle) %}</a>
     Season : {{ season }}
     Episode : {{ episodenum }}
     Air Date : {{ date }}
     {% if admin %}
-    <a href="/admin/delete/work/{{ ID }}">Delete</a>
+    <a href="/admin/delete/work/{% raw url_escape(ID) %}">Delete</a>
     {% end %}
 
     <h3>Poster</h3>
@@ -51,9 +51,9 @@
     {% if directors %}
       <ul>
         {% for (fname, lname, num) in directors %}
-        <li><a href="/person/{{ fname }}/{{ lname }}/{{ num }}">
+        <li><a href="/person/{% raw url_escape(fname) %}/{% raw url_escape(lname) %}/{% raw url_escape(num) %}">
             {{ fname }} {{ lname }}</a>
-          {% if admin %}(<a href="/admin/delete/director/{{ fname }}/{{ lname }}/{{ num }}/{{ ID }}">delete</a>){% end %}
+          {% if admin %}(<a href="/admin/delete/director/{% raw url_escape(fname) %}/{% raw url_escape(lname) %}/{% raw url_escape(num) %}/{% raw url_escape(ID) %}">delete</a>){% end %}
         </li>
         {% end %}
       </ul>
@@ -67,7 +67,7 @@
         {% for (fname, lname, num) in writers %}
         <li><a href="/person/{{ fname }}/{{ lname }}/{{ num }}">
             {{ fname }} {{ lname }}</a>
-          {% if admin %}(<a href="/admin/delete/writer/{{ fname }}/{{ lname }}/{{ num }}/{{ ID }}">delete</a>){% end %}
+          {% if admin %}(<a href="/admin/delete/writer/{% raw url_escape(fname) %}/{% raw url_escape(lname) %}/{% raw url_escape(num) %}/{% raw url_escape(ID) %}">delete</a>){% end %}
         </li>
         {% end %}
       </ul>
@@ -79,9 +79,9 @@
     {% if actors %}
       <ul>
         {% for (fname, lname, num, role) in actors %}
-        <li><a href="/person/{{ fname }}/{{ lname }}/{{ num }}">
+        <li><a href="/person/{% raw url_escape(fname) %}/{% raw url_escape(lname) %}/{% raw url_escape(num) %}">
             {{ fname }} {{ lname }}</a> as {{ role }}
-          {% if admin %}(<a href="/admin/delete/actor/{{ fname }}/{{ lname }}/{{ num }}/{{ ID }}/{{ role }}">delete</a>){% end %}
+          {% if admin %}(<a href="/admin/delete/actor/{% raw url_escape(fname) %}/{% raw url_escape(lname) %}/{% raw url_escape(num) %}/{% raw url_escape(ID) %}/{% raw url_escape(role) %}">delete</a>){% end %}
         </li>
         {% end %}
       </ul>
