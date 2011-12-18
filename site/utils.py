@@ -44,3 +44,20 @@ def is_serie(ID):
 
 def is_episode(ID):
     return ID[0] == '"' and ID.find('{') != -1
+
+def person_info(t, person, ID, admin):
+    (fname, lname, num) = person
+    res = ('<a href="/person/%s/%s/%s">%s %s</a>' %
+           (url_escape(fname), url_escape(lname), url_escape(num),
+            url_escape(fname), url_escape(lname)))
+    if admin:
+        res += (' (<a href="/admin/delete/%s/%s/%s/%s/%s">delete</a>)',
+                (t, url_escape(fname), url_escape(lname), url_escape(num),
+                 url_escape(ID)))
+    return res
+
+def director_info(director, ID, admin):
+    return person_info('director', director, ID, admin)
+
+def writer_info(writer, ID, admin):
+    return person_info('writer', writer, ID, admin)
