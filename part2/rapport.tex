@@ -188,7 +188,7 @@ Les requêtes demandées étaient les suivantes:
     \begin{align*}
       A & \leftarrow Movie * \pi_{ID}(\sigma_{FirstName = XFName \wedge LastName = XLName \wedge Num = XNum} (Actor)) \\
       B & \leftarrow \pi_{FirstName,LastName,Num}(\sigma_{FirstName \neq XFName \wedge LastName \neq XLName \wedge Num \neq XNum}(Actor) * A) \\
-      C & \leftarrow Movie * \pi_{ID}_(Actor * Y2) \\
+      C & \leftarrow Movie * \pi_{ID}(Actor * B) \\
       D & \leftarrow \pi_{FirstName,LastName,Num}(\sigma_{FirstName \neq XFName \wedge LastName \neq XLName \wedge Num \neq XNum}(Actor) * C)
     \end{align*}
   \item R4 :
