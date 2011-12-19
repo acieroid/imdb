@@ -186,8 +186,10 @@ Les requêtes demandées étaient les suivantes:
   \item R3 :
     Si les infos sur l'acteur X sont dans $XFName$, $XLName$, $XNum$
     \begin{align*}
-      X & \leftarrow \sigma_{FirstName = XFName \wedge LastName = XLName \wedge Num = XNum} (Actor) \\
-      R3 & \leftarrow \pi_{FirstName,LastName,Num}(Actor*\pi_{ID} (X * (Work * Movie))
+      A & \leftarrow Movie * \pi_{ID}(\sigma_{FirstName = XFName \wedge LastName = XLName \wedge Num = XNum} (Actor)) \\
+      B & \leftarrow \pi_{FirstName,LastName,Num}(\sigma_{FirstName \neq XFName \wedge LastName \neq XLName \wedge Num \neq XNum}(Actor) * A) \\
+      C & \leftarrow Movie * \pi_{ID}_(Actor * Y2) \\
+      D & \leftarrow \pi_{FirstName,LastName,Num}(\sigma_{FirstName \neq XFName \wedge LastName \neq XLName \wedge Num \neq XNum}(Actor) * C)
     \end{align*}
   \item R4 :
     \begin{align*}
