@@ -48,6 +48,11 @@ class Episode(BasePage):
                         (episode_id,))
             genres = map(lambda x: x[0], cur.fetchall())
             
+            # fetch the votes
+            cur.execute('select Up, Down from Votes where ID = ?', 
+                        (episode_id,))
+            (upvotes, downvotes) = cur.fetchone() or (0, 0)
+            
             cur.close()
             
             self.write(loader.load('episode.html').generate(episode=episode,
@@ -58,6 +63,8 @@ class Episode(BasePage):
                                                             countries=countries,
                                                             languages=languages,
                                                             genres=genres,
+                                                            upvotes=upvotes,
+                                                            downvotes=downvotes,
                                                             admin=admin))
         else:
             self.error('Episode \'%s\' not found' % episode_id)

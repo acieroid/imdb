@@ -53,6 +53,11 @@ class Serie(BasePage):
                         
             episodes = cur.fetchall()
 
+            # fetch the votes
+            cur.execute('select Up, Down from Votes where ID = ?', 
+                        (serie_id,))
+            (upvotes, downvotes) = cur.fetchone() or (0, 0)
+            
             cur.close()
             
             self.write(loader.load('serie.html').generate(serie=serie,
@@ -64,6 +69,8 @@ class Serie(BasePage):
                                                           languages=languages,
                                                           genres=genres,
                                                           episodes=episodes,
+                                                          upvotes=upvotes,
+                                                          downvotes=downvotes,
                                                           admin=admin))
         else:
             self.error('Serie \'%s\' not found', serie_id)
