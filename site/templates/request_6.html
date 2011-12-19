@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+Request
+{% end %}
+
+{% block body %}
+{% import utils %}
+<div class="centered"><h3>Request {{ request }}</h3></div>
+
+{% if res %}
+<table border="1">
+<tr>
+  <th>Serie</th>
+  <th># of episodes</th>
+  <th>Average # of episodes per season</th>
+  <th>Average # of actors per season</th>
+</tr>
+  {% for (SID, nEpisodes, avgEpisodes, avgActors) in res %}
+    <tr>
+      <td>{% raw utils.work_link(SID) %}</td>
+      <td>{{ nEpisodes }}</td>
+      <td>{{ avgEpisodes }}</td>
+      <td>{{ avgActors }}</td>
+    </tr>
+  {% end %}
+</table>
+</ul>
+{% else %}
+<span class="grey">No results</span>
+{% end %}
+
+{% end %}

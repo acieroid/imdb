@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+Requests
+{% end %}
+
+{% block body %}
+<div class="centered"><h3>Requests</h3></div>
+
+<ul>
+  <li><a href="/req/1">Request 1</a></li>
+  <li><a href="/req/2">Request 2</a></li>  
+  <li><form action="/req/3" method="get">
+      <label control="fname">First name:</label>
+      <input type="text" name="fname" id="fname" /><br />
+      <label control="lname">Last name:</label>
+      <input type="text" name="lname" id="lname" /><br />
+      <label control="num">Number:</label>
+      <input type="text" name="num" id="num" /><br />
+      <input type="submit" value="Request 3" /></li>
+  <li><a href="/req/4">Request 4</a></li>
+  <li><a href="/req/5">Request 5</a></li>
+  <li><a href="/req/6">Request 6</a></li>
+</ul>
+{% end %}

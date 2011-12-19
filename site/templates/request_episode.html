@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+Request
+{% end %}
+
+{% block body %}
+{% import utils %}
+<div class="centered"><h3>Request {{ request }}</h3></div>
+
+{% if res %}
+<ul>
+  {% for (ID) in res %}
+    <li>{% raw utils.work_link(ID) %}</li>
+  {% end %}
+</ul>
+{% else %}
+<span class="grey">No results</span>
+{% end %}
+
+{% end %}

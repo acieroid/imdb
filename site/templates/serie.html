@@ -104,7 +104,7 @@ $(document).ready(function(){
       <span class="info">Countries</span>:
       {% if countries %}
         {{ ', '.join(countries) }}. <a href="#" id="locate">Show map</a><br /> 
-        <img src="/location/{{ ','.join(countries) }}" alt="Serie locations" id="location"/>
+        <div id="location"><img src="/location/{{ ','.join(countries) }}" alt="Serie locations" /></div>
       {% else %}
         <span class="grey">No countries</span>
       {% end %}

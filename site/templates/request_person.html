@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+Request
+{% end %}
+
+{% block body %}
+<div class="centered"><h3>Request {{ request }}</h3></div>
+
+{% if res %}
+<ul>
+  {% for (fname, lname, num) in res %}
+    <li><a href="/person/{% raw url_escape(fname) %}/{% raw url_escape(lname) %}/{% raw url_escape(num) %}">
+        {{ fname }}, {{ lname }} {% if num != '' %} ({{num}}) {% end %}</li>
+  {% end %}
+</ul>
+{% else %}
+<span class="grey">No results</span>
+{% end %}
+
+{% end %}
