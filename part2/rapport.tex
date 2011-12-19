@@ -244,32 +244,32 @@ Les requêtes demandées étaient les suivantes:
   \item R1 :
     \begin{lstlisting}
 select FirstName, LastName, Num from Actor where
-  count(select distinct(Year) from Work
-          where Year >= 2003 
-            and Year <= 2007
-            and Actor.ID = Work.ID) = (2007-2003)
-
+  (select count(distinct Year) from Work
+    where Year >= 2003
+     and Year <= 2007
+     and Actor.ID = Work.ID) = (2007-2003)
     \end{lstlisting}
   \item R2 :
     \begin{lstlisting}
 select distinct FirstName, LastName, Num
   from Writer, Movie, Work
-  where Writer.ID=Movie.ID and Work.ID=Movie.ID
+  where Writer.ID = Movie.ID and Work.ID = Movie.ID
   group by FirstName, LastName, Num, Year
   having count(Writer.ID) >= 2
-    
     \end{lstlisting}
   \item R3 :
     Si les infos sur l'acteur X sont dans $XFName$, $XLName$, $XNum$
+% TODO: vérifier que ça marche dans sqlite, ça n'a pas l'air de
+% retourner les bons résultats ici
     \begin{lstlisting}
 select distinct X.FirstName, X.LastName, X.Num from Actor X
   where exists (select * from Actor Y1
                   where exists (select * from Actor Z, Actor Y2 
                                   where Z.ID = Y2.ID
                                     and Z.ID != X.ID
-                                    and Z.FirstName = ZFName
-                                    and Z.LastName = ZLName
-                                    and Z.Num = ZNum
+                                    and Z.FirstName = XFName
+                                    and Z.LastName = XLName
+                                    and Z.Num = XNum
                                     and Y2.FirstName = Y1.FirstName
                                     and Y2.LastName = Y1.LastName
                                     and Y2.Num = Y1.Num)
@@ -279,18 +279,26 @@ select distinct X.FirstName, X.LastName, X.Num from Actor X
     \begin{lstlisting}
 select ID from Episode
   where not exists (select * from Person, Actor
-                      where Person.FirstName = Actor.FirstName
+                      where Person.Gender = 'M'
+                        and Person.FirstName = Actor.FirstName
                         and Person.LastName = Actor.LastName
                         and Person.Num = Actor.Num
                         and Actor.ID = Episode.ID)
     \end{lstlisting}
   \item R5 :
+%% select FirstName, LastName, Num, count(*) as Count
+%%   from Actor, Serie
+%%   where Actor.ID = Serie.ID
+%%   group by FirstName,LastName,Num
+%%   order by Count desc
     \begin{lstlisting}
-select FirstName, LastName, Num, count(*) as compteur
-  from Actor, Serie
-  where Actor.ID=Serie.ID
-  group by FirstName,LastName,Num
-  order by compteur desc
+select FirstName, LastName, Num from Actor, Serie
+ where Actor.ID = Serie.ID
+ group by FirstName, LastName, Num
+ having  count(*) = (select max(Count) from (select count(*) as Count
+                                           from Actor, Serie
+                                           where Actor.ID = Serie.ID
+                                           group by FirstName, LastName, Num));
     \end{lstlisting}
   \item R6 :
     \begin{lstlisting}
