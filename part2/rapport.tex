@@ -295,14 +295,15 @@ select FirstName, LastName, Num, count(*) as compteur
   \item R6 :
     % TODO
     \begin{lstlisting}
-select count(Episode.ID), avg(EpisodesPerSeason.Count), avg(ActorsPerSeason.Count)
+select Serie.ID, count(Episode.ID), 
+       avg(EpisodesPerSeason.Count), avg(ActorsPerSeason.Count)
   from Episode, Serie, Work,
-       (select Episode.SID as ID, count(*) as Count
-          from Episode group by Season) EpisodesPerSeason,
-       (select Episode.SID as ID, count(*) as Count
+       (select Episode.SID as SID, count(*) as Count
+          from Episode group by Episode.SID, Season) EpisodesPerSeason,
+       (select Episode.SID as SID, count(*) as Count
           from Actor, Episode
           where Actor.ID = Episode.ID
-          group by Episode.Season) ActorsPerSeason,
+          group by Episode.SID, Episode.Season) ActorsPerSeason
   where Episode.SID = Serie.ID
     and Episode.SID = EpisodesPerSeason.SID
     and Episode.SID = ActorsPerSeason.SID
