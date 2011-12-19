@@ -30,8 +30,7 @@ showtabs=false,
 tabsize=2,
 }
 
-
-\title{INFO-H-303: projet IMDB -- première partie}
+\title{INFO-H-303: projet IMDB -- seconde partie}
 
 \author{Quentin \textsc{Stiévenart} \and Damien \textsc{Wiltgen}}
 \date{\today}
@@ -113,7 +112,7 @@ Director(\underline{FirstName, LastName, Num}, ID)
 Admin(\underline{Mail}, Password)
 \section{Méthode d'extraction des données}
 Pour extraire les données depuis les fichiers d'\emph{IMDB}, Perl a
-été choisi, grâce à la faciliter d'écrire des programmes manipulant du
+été choisi, grâce à la facilité d'écrire des programmes manipulant du
 texte ainsi qu'à la présence du module \texttt{DBI}, qui permet de
 manipuler plusieurs moteurs de base de donnée en passant par une
 interface unique. Il a ainsi pu être possible de tester la vitesse
@@ -135,9 +134,19 @@ raisons:
     l'interface web) est très simple et est fournie avec Python.
 \end{list}
 
-Lors de l'import, la base de donnée a été placée en RAM (dans
-\texttt{/dev/shm/}) afin de ne pas être limité par la vitesse d'écriture du
-disque dur.
+Pour améliorer la vitesse d'importation, les choses suivantes ont été faites:
+\begin{list}{-}{}
+  \item la base de donnée a été placée en RAM (dans
+    \texttt{/dev/shm/}) afin de ne pas être limité par la vitesse
+    d'écriture du disque dur~;
+  \item le \emph{journal} de SQLite a été désactivé (\texttt{pragma
+    journal\_mode = off})~;
+  \item les requêtes d'insertion ont été précompilés grâce à la
+    méthode \texttt{prepare}, avant d'être éxécutées un grand nombre de fois~;
+  \item les transactions ont été utilisées, en désactivant
+    l'\emph{AutoCommit} et en faisant un \emph{commit} à la fin de
+    l'importation des données
+\end{list}
 
 Les valeurs pouvant être nulles dans le diagramme entité-associations
 sont remplacées par des chaînes de caractère vides dans le cas où sont
@@ -188,12 +197,15 @@ Les requêtes demandées étaient les suivantes:
 \subsection{Calcul relationnel tuple}
 \begin{list}{-}{}
   \item R1 :
+    % TODO
     \begin{align*}
     \end{align*}
   \item R2 :
+    % TODO
     \begin{align*}
     \end{align*}
   \item R3 :
+    Si les infos sur l'acteur X sont dans $XFName$, $XLName$, $XNum$
     \begin{align*}
       \{ x.FirstName, x.LastName, x.Num | &Actor(x) \wedge \exists y_1, y_2, z ( \\
       &Actor(z) \wedge Actor(y_1) \wedge Actor(y_2) \wedge \\
@@ -235,6 +247,7 @@ select distinct FirstName, LastName, Num
     
     \end{lstlisting}
   \item R3 :
+    Si les infos sur l'acteur X sont dans $XFName$, $XLName$, $XNum$
     \begin{lstlisting}
 select distinct X.FirstName, X.LastName, X.Num from Actor X
   where exists (select * from Actor Y1
@@ -264,12 +277,32 @@ select FirstName, LastName, Num, count(*) as compteur
   from Actor, Serie
   where Actor.ID=Serie.ID
   group by FirstName,LastName,Num
-  order by compteur DESC
+  order by compteur desc
     \end{lstlisting}
   \item R6 :
+    % TODO
     \begin{lstlisting}
     \end{lstlisting}
 \section{Hypothèses}
+\section{Interface}
+Afin de consulter les données, une interface web a été développée en
+Python, en utilisant les technologies suivantes:
+\begin{list}{-}{}
+  \item \emph{Tornado} comme serveur web, ainsi que module de templates~;
+  \item \emph{SQLite 3} pour manipuler la base de donnée~;
+  \item \emph{Lex} et \emph{Yacc} pour parser le langage de recherche.
+\end{list}
+
+Outre la base demandée, les fonctionnalitées suivantes ont été développées:
+\begin{list}{-}{}
+  \item Un langage de recherche permettant de faire des recherches évoluées
+  \item La localisation des films sur une carte \emph{Google Maps}
+  \item L'affichage du poster des films, en utilisant
+    \texttt{http://imdbapi.com} pour récupérer les URL des images
+  \item Un système de vote à la \emph{Reddit} (chaque visiteur peut
+    \emph{upvoter} ou \emph{downvoter} une œuvre)
+\end{list}
+
 \end{list}
 
 \end{document}
