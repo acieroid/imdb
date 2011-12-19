@@ -5,39 +5,127 @@
 Serie: {{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})
 {% end %}
 
+{% block css %}
+#infos {
+    padding: 0 0 0 330px;
+    position: relative;
+    height: 500px;
+}
+#poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+h4 {
+    text-indent: 20px;
+}
+ul {
+    list-style-type: none;
+}
+{% end %}
+
 {% block javascript %}
 $(document).ready(function(){
     $('div[class="season"] ul').hide();
     $('div[class="season"] h4').click(function () {
         $(this).next('ul').toggle('slow');
     });
+    
+    $('#upvote').click(function (e) {
+        e.preventDefault();
+        var upvotes = parseInt($.trim($('#upvotes').html()));
+        $.get('/upvote/{{ ID }}', function (data) {
+            $('#upvotes').html(upvotes+1);
+        });
+    });
+    $('#downvote').click(function (e) {
+        e.preventDefault();
+        var downvotes = parseInt($.trim($('#downvotes').html()));
+        $.get('/downvote/{{ ID }}', function (data) {
+            $('#downvotes').html(downvotes+1);
+        });
+        $.get('/downvote/{{ ID }}');
+        /*location.reload();*/
+    });
+
+    $('#location').hide();
+    $('#locate').click(function (e) {
+      e.preventDefault();
+      $('#location').toggle();
+    });
 });
 {% end %}
 
 {% block body %}
+{% import utils %}
 {% set (title, year, note, endyear) = serie %}
     <h1>{{ title }} ({{ year }} - {% if endyear %}{{ endyear }}{% end %})</h1>
 
     {% if admin %}
-    <a href="/admin/delete/work/{% raw url_escape(ID) %}">Delete</a>
+    <div class="centered">
+      <a href="/admin/delete/work/{% raw url_escape(ID) %}">Delete</a>
+    </div>
     {% end %}
 
-    <h3>Poster</h3>
-    <img src="/poster/{% raw url_escape(title) %}/{{ year }}/" alt="Serie poster"/>
-
-    <h3>Rating</h3> 
-      {% if note %} {{ note }}
-      {% else %} -
+    <div id="infos">
+      <div id="poster">
+        <img src="/poster/{% raw url_escape(title) %}/{{ year }}/" alt="Serie poster"/>
+      </div>
+      
+      
+      <span class="info">Rating</span>:
+        {% if note %} {{ note }}
+        {% else %} <span class="grey">-</span>
+        {% end %}
+      /10
+      <br />
+      
+      <span class="info">Votes</span>:
+      <span id="upvotes">{{ upvotes }}</span><a href="#" id="upvote">+</a>/
+      <span id="downvotes">{{ downvotes }}</span><a href="#" id="downvote">-</a>
+      <br />
+      
+      <span class="info">Genres</span>:
+      {% if genres %}
+        {{ ', '.join(genres) }}
+      {% else %}
+         <span class="grey">No genres</span>
       {% end %}
-    /10
+      <br />
+      
+      <span class="info">Languages</span>:
+      {% if languages %}
+        {{ ', '.join(languages) }}
+      {% else %}
+        <span class="grey">No languages</span>
+      {% end %}
+      <br />
+      
+      <span class="info">Countries</span>:
+      {% if countries %}
+        {{ ', '.join(countries) }}. <a href="#" id="locate">Show map</a><br /> 
+        <img src="/location/{{ ','.join(countries) }}" alt="Serie locations" id="location"/>
+      {% else %}
+        <span class="grey">No countries</span>
+      {% end %}
+      
+      <span class="info">Director{% if len(directors) > 1 %}s{% end %}</span>:
+      {% if directors %}
+        {% raw ', '.join(map(lambda d: utils.director_info(d, ID, admin), directors)) %}
+      {% else %}
+        <span class="grey">No director</span>
+      {% end %}
+      <br />
 
-    <h3>Genres</h3>
-    {% if genres %}
-      {{ ', '.join(genres) }}
-    {% else %}
-       No genres
-    {% end %}
-
+      <span class="info">Writer{% if len(writers) > 1 %}s{% end %}</span>:
+      {% if writers %}
+        {% raw ', '.join(map(lambda w: utils.writer_info(w, ID, admin), writers)) %}
+      {% else %}
+        <span class="grey">No writer</span>
+      {% end %}
+    </div>
+    
+    
     {% if episodes %}
     <h3>Episodes</h3>
     {% set (seasonP) = 0 %}
@@ -60,47 +148,7 @@ $(document).ready(function(){
     </ul>
     {% end %}
     
-    <h3>Countries</h3>
-    {% if countries %}
-      {{ ', '.join(countries) }}
-    {% else %}
-      No countries
-    {% end %}
 
-    <h3>Languages</h3>
-    {% if languages %}
-      {{ ', '.join(languages) }}
-    {% else %}
-      No languages
-    {% end %}
-
-    <h3>Director(s)</h3>
-    {% if directors %}
-      <ul>
-        {% for (fname, lname, num) in directors %}
-        <li><a href="/person/{% raw url_escape(fname) %}/{% raw url_escape(lname) %}/{% raw url_escape(num) %}">
-            {{ fname }} {{ lname }}</a>
-          {% if admin %}(<a href="/admin/delete/director/{% raw url_escape(fname) %}/{% raw url_escape(lname) %}/{% raw url_escape(num) %}/{% raw url_escape(ID) %}">delete</a>){% end %}
-        </li>
-        {% end %}
-      </ul>
-    {% else %}
-      No director
-    {% end %}
-
-    <h3>Writer(s)</h3>
-    {% if writers %}
-      <ul>
-        {% for (fname, lname, num) in writers %}
-        <li><a href="/person/{% raw url_escape(fname) %}/{% raw url_escape(lname) %}/{% raw url_escape(num) %}">
-            {{ fname }} {{ lname }}</a>
-          {% if admin %}(<a href="/admin/delete/writer/{% raw url_escape(fname) %}/{% raw url_escape(lname) %}/{% raw url_escape(num) %}/{% raw url_escape(ID) %}">delete</a>){% end %}
-        </li>
-        {% end %}
-      </ul>
-    {% else %}
-      No writer
-    {% end %}
 
     <h3>Actors</h3>
     {% if actors %}
@@ -113,6 +161,6 @@ $(document).ready(function(){
         {% end %}
       </ul>
     {% else %}
-      No actor
+      <span class="grey">No actor</span>
     {% end %}
 {% end %}
