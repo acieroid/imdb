@@ -49,7 +49,7 @@ $(document).ready(function(){
 {% import utils %}
 {% set (stitle, syear, snote, season, episodenum, date, etitle, SID) = episode %}
     <h1>{{ etitle }}</h1>
-    <h2><a href="/serie/{{ SID }}">{% raw url_escape(stitle) %}</a> (Season {{ season }} Episode {{ episodenum }})</h2>
+    <h2><a href="/serie/{% raw url_escape(SID) %}">{{ stitle }}</a> (Season {{ season }} Episode {{ episodenum }})</h2>
     {% if admin %}
     <div class="centered">
       <a href="/admin/delete/work/{% raw url_escape(ID) %}">Delete</a>
