@@ -295,20 +295,22 @@ select FirstName, LastName, Num, count(*) as compteur
   \item R6 :
     % TODO
     \begin{lstlisting}
-SELECT COUNT(E.ID),
-  COUNT(E.ID)/(2011 - W1.Year + 1 + (SELECT EndYear - 2011
-                                     FROM Serie S4
-                                     WHERE S4.ID=S1.ID)),
-  (SELECT COUNT(*)
-   FROM Actor
-   WHERE Actor.ID=S1.ID)
-       
-  FROM Episode E, Serie S1, Work W1
-  WHERE E.SID=S1.ID AND W1.ID=S1.ID AND W1.Note > (SELECT AVG(Note)
-                                                   FROM Work W3, Serie S3
-                                                   WHERE S3.ID=W3.ID)
-  GROUP BY E.SID;
-    \end{lstlisting}
+select count(Episode.ID), avg(EpisodesPerSeason.Count), avg(ActorsPerSeason.Count)
+  from Episode, Serie, Work,
+       (select Episode.SID as ID, count(*) as Count
+          from Episode group by Season) EpisodesPerSeason,
+       (select Episode.SID as ID, count(*) as Count
+          from Actor, Episode
+          where Actor.ID = Episode.ID
+          group by Episode.Season) ActorsPerSeason,
+  where Episode.SID = Serie.ID
+    and Episode.SID = EpisodesPerSeason.SID
+    and Episode.SID = ActorsPerSeason.SID
+    and Serie.ID = Work.ID
+    and Work.Note > (select avg(Note) from Work W, Serie S
+                      where S.ID = W.ID)
+  group by Episode.SID
+\end{lstlisting}
 \section{Hypothèses}
 \section{Interface}
 Afin de consulter les données, une interface web a été développée en
