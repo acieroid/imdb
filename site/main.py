@@ -33,7 +33,14 @@ application = tornado.web.Application([
     (r'/admin/delete/work/(.*)', pages.AdminDeleteWork),
     (r'/admin/delete/person/(.+)/(.+)/(.*)', pages.AdminDeletePerson),
     (r'/admin/delete/(director|writer|actor)/(.+)/(.+)/(.*)/(.+)/?(.*)', pages.AdminDeletePersonType),
-    (r'/admin/delete/(genre|country|language)', pages.AdminDeleteInfo)
+    (r'/admin/delete/(genre|country|language)', pages.AdminDeleteInfo),
+    (r'/requests', pages.Requests),
+    (r'/req/1', pages.Request1),
+    (r'/req/2', pages.Request2),
+    (r'/req/3', pages.Request3),
+    (r'/req/4', pages.Request4),
+    (r'/req/5', pages.Request5),
+    (r'/req/6', pages.Request6),
 ], **settings)
 
 if __name__ == '__main__':

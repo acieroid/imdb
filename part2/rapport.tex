@@ -243,7 +243,7 @@ Les requêtes demandées étaient les suivantes:
 \begin{list}{-}{}
   \item R1 :
     \begin{lstlisting}
-select FirstName, LastName, Num from Actor where
+select distinct FirstName, LastName, Num from Actor where
   (select count(distinct Year) from Work
     where Year >= 2003
      and Year <= 2007
@@ -298,7 +298,7 @@ select FirstName, LastName, Num from Actor, Serie
  having  count(*) = (select max(Count) from (select count(*) as Count
                                            from Actor, Serie
                                            where Actor.ID = Serie.ID
-                                           group by FirstName, LastName, Num));
+                                           group by FirstName, LastName, Num))
     \end{lstlisting}
   \item R6 :
     \begin{lstlisting}
