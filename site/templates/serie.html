@@ -34,18 +34,16 @@ $(document).ready(function(){
     $('#upvote').click(function (e) {
         e.preventDefault();
         var upvotes = parseInt($.trim($('#upvotes').html()));
-        $.get('/upvote/{{ ID }}', function (data) {
+        $.get('/upvote/{% raw url_escape(ID) %}', function (data) {
             $('#upvotes').html(upvotes+1);
         });
     });
     $('#downvote').click(function (e) {
         e.preventDefault();
         var downvotes = parseInt($.trim($('#downvotes').html()));
-        $.get('/downvote/{{ ID }}', function (data) {
+        $.get('/downvote/{% raw url_escape(ID) %}', function (data) {
             $('#downvotes').html(downvotes+1);
         });
-        $.get('/downvote/{{ ID }}');
-        /*location.reload();*/
     });
 
     $('#location').hide();

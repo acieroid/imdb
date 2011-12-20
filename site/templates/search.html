@@ -6,7 +6,7 @@ Search
 
 {% block javascript %}
 $(document).ready(function () {
-  $.get('/search_results/{{ query }}', function (data) {
+  $.get('/search_results/{% raw url_escape(query) %}', function (data) {
     $('#results').html(data);
   });
 });
