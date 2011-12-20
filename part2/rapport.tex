@@ -255,11 +255,11 @@ Les requêtes demandées étaient les suivantes:
     \end{align*}
   \item R4 :
     \begin{align*}
-      \{ e.ID | Episode(e) \wedge \lnot \exists p, a (&Person(p) ~\wedge Actor(a) ~\wedge \\
+      \{ e.ID | Episode(e) \wedge \forall p, a (&Person(p) ~\wedge Actor(a) ~\wedge \\
         & p.FirstName = a.FirstName ~\wedge \\
         & p.LastName = a.LastName ~\wedge \\
         & p.Num = a.Num ~\wedge \\
-        & p.Gender = `M`)\}
+        & a.ID = e.ID ~\rightarrow p.Gender = `F`)\}
     \end{align*}
 \end{list}
 
