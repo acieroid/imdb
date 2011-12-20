@@ -7,7 +7,7 @@ def work_link(ID):
     for a serie, /movie/ for a movie and /episode/ for an episode)"""
     if ID[0] != '"':
         # Movie
-        res = re.search('^(.+) \(([0-9]{4})[^\)]*\)$', ID)
+        res = re.search('^(.+) \(([0-9]{4})[^\)]*\)', ID)
         if res:
             title = escape(res.group(1))
             year = escape(res.group(2))
@@ -16,7 +16,7 @@ def work_link(ID):
             return ('Invalid movie ID: %s' % escape(ID))
     elif ID.find('{') != -1:
         # Episode
-        res = re.search('^"(.+)" \(([0-9]{4})[^\)]*\) \{([^\(]*)(\(#([0-9]{1,3})\.([0-9]{1,3})\))?\}$', ID)
+        res = re.search('^"(.+)" \(([0-9]{4})[^\)]*\) \{([^\(]*)(\(#([0-9]{1,3})\.([0-9]{1,3})\))?\}', ID)
         if res:
             title = escape(res.group(1))
             year = escape(res.group(2))
