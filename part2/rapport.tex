@@ -200,13 +200,32 @@ Les requêtes demandées étaient les suivantes:
 \subsection{Calcul relationnel tuple}
 \begin{list}{-}{}
   \item R1 :
+    %% \{ a.FirstName, a.LastName, a.Num | &Actor(a) \wedge \exists w1, w2, w3, w4, w5 ( \\
+    %% &Work(w1) \wedge w1.ID = a.ID \wedge w1.Year = 2003 \wedge \\
+    %% &Work(w2) \wedge w2.ID = a.ID \wedge w2.Year = 2004 \wedge \\
+    %% &Work(w3) \wedge w3.ID = a.ID \wedge w3.Year = 2005 \wedge \\
+    %% &Work(w4) \wedge w4.ID = a.ID \wedge w4.Year = 2006 \wedge \\
+    %% &Work(w5) \wedge w5.ID = a.ID \wedge w5.Year = 2007)\}
+
     \begin{align*}
-    \{ a.FirstName, a.LastName, a.Num | &Actor(a) \wedge \exists w1, w2, w3, w4, w5 ( \\
-    &Work(w1) \wedge w1.ID = a.ID \wedge w1.Year = 2003 \wedge \\
-    &Work(w2) \wedge w2.ID = a.ID \wedge w2.Year = 2004 \wedge \\
-    &Work(w3) \wedge w3.ID = a.ID \wedge w3.Year = 2005 \wedge \\
-    &Work(w4) \wedge w4.ID = a.ID \wedge w4.Year = 2006 \wedge \\
-    &Work(w5) \wedge w5.ID = a.ID \wedge w5.Year = 2007)\}
+    \{ p.FirstName, p.LastName, p.Num | &Person(p) \wedge \exists a1, a2, a3, a4, a5, w1, w2, w3, w4, w5 ( \\
+    & Work(w1) \wedge Work(w2) \wedge Work(w3) \wedge Work(w4) \wedge \\
+    & Work(w5) \wedge Actor(a1) \wedge Actor(a2) \wedge Actor(a3) \wedge \\
+    & Actor(a4) \wedge Actor(a5) \\
+    & a1.FirstName = p.FirstName \wedge a1.Num = p.Num \wedge \\
+    & a1.LastName = p.LastName \wedge \\
+    & a2.FirstName = p.FirstName \wedge a2.Num = p.Num \wedge \\
+    & a2.LastName = p.LastName \wedge \\
+    & a3.FirstName = p.FirstName \wedge a3.Num = p.Num \wedge \\
+    & a3.LastName = p.LastName \wedge \\
+    & a4.FirstName = p.FirstName \wedge a4.Num = p.Num \wedge \\
+    & a5.LastName = p.LastName \wedge \\
+    & a5.FirstName = p.FirstName \wedge a5.Num = p.Num \wedge \\
+    & w1.ID = a1.ID \wedge w1.Year = 2003 \wedge \\
+    & w2.ID = a2.ID \wedge w2.Year = 2004 \wedge \\
+    & w3.ID = a3.ID \wedge w3.Year = 2005 \wedge \\
+    & w4.ID = a4.ID \wedge w4.Year = 2006 \wedge \\
+    & w5.ID = a5.ID \wedge w5.Year = 2007)\}
     \end{align*}
   \item R2 :
     \begin{align*}
@@ -322,7 +341,6 @@ select Serie.ID, count(Episode.ID),
                       where S.ID = W.ID)
   group by Episode.SID
 \end{lstlisting}
-\section{Hypothèses}
 \section{Interface}
 Afin de consulter les données, une interface web a été développée en
 Python, en utilisant les technologies suivantes:
