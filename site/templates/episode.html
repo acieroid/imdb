@@ -2,7 +2,13 @@
 
 {% block title %}
 {% set (stitle, syear, snote, season, episodenum, date, etitle, SID) = episode %}
-{{ etitle }} | {{ stitle }} (Season {{ season }} Episode {{ episodenum }})
+{{ etitle }} | {{ stitle }}
+{% if season or episodenum %}
+  (
+    {% if season %} Season {{ season }} {% end %}
+    {% if episodenum %} Episode {{ episodenum }} {% end %}
+  )
+{% end %}
 {% end %}
 
 {% block css %}
@@ -47,7 +53,13 @@ $(document).ready(function(){
 {% import utils %}
 {% set (stitle, syear, snote, season, episodenum, date, etitle, SID) = episode %}
     <h1>{{ etitle }}</h1>
-    <h2><a href="/serie/{% raw url_escape(SID) %}">{{ stitle }}</a> (Season {{ season }} Episode {{ episodenum }})</h2>
+    <h2><a href="/serie/{% raw url_escape(SID) %}">{{ stitle }}</a> 
+{% if season or episodenum %}
+  (
+    {% if season %} Season {{ season }} {% end %}
+    {% if episodenum %} Episode {{ episodenum }} {% end %}
+  )
+{% end %}</h2>
     {% if admin %}
     <div class="centered">
       <a href="/admin/delete/work/{% raw url_escape(ID) %}">Delete</a>
@@ -58,7 +70,18 @@ $(document).ready(function(){
         <img src="/poster/{% raw url_escape(stitle) %}/{{ syear }}/" alt="Serie poster"/>
       </div>
       
-      <span class="info">Episode</span> {{ episodenum }} <span class="info">from Season</span> {{ season }}<br />      
+      {% if season or episodenum %} 
+        {% if episodenum %}
+          <span class="info">Episode</span> {{ episodenum }}
+        {% end %}
+        {% if season and episodenum %}
+          <span class="info">from</span>
+        {% end %}
+        {% if season %}
+          <span class="info">Season</span> {{ season }}
+        {% end %}
+      <br />
+      {% end %}
       <span class="info">Air Date</span>: {{ date }}<br />  
       <span class="info">Serie rating</span>:
         {% if snote %} {{ snote }}

@@ -1,17 +1,17 @@
 import tornado.ioloop
 import tornado.web
 import tornado.template
-import urllib
 import urllib2
 import json
+from tornado.escape import url_escape
 
 class Poster(tornado.web.RequestHandler):
     def get(self, title, year):
         # fetch the cover
         response = urllib2.urlopen('http://www.imdbapi.com/?i=&t=' +
-                                   urllib.quote_plus(title) +
-                                   '&y=' + urllib.quote_plus(year))
-        table=json.loads(response.read())
+                                   url_escape(title) +
+                                   '&y=' + year)
+        table = json.loads(response.read())
         if table['Response'] == 'True':
             poster = table['Poster']
             if poster != 'N/A' and title == table['Title']:

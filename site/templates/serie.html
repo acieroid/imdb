@@ -134,7 +134,11 @@ $(document).ready(function(){
         </div>
             {% end %}
         <div class="season">
-        <h4>Season {{ season }}</h4>
+        {% if season %}
+          <h4>Season {{ season }}</h4>
+        {% else %}
+          <h4>Episodes</h4>
+        {% end %}
         <ul>
         {% end %}
             <li><a href="/episode/{% raw url_escape(epID) %}">
