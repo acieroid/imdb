@@ -4,7 +4,7 @@ use DBI;
 use Term::ProgressBar;
 
 print "Connecting to the database\n";
-my $db = "/dev/shm/imdb.sqlite";
+my $db = "/dev/shm/db.sqlite";
 my $dbh = DBI->connect("dbi:SQLite:dbname=$db", "", "", {AutoCommit => 0}) or die $!;
 #my $dbh = DBI->connect("dbi:Pg:dbname=imdb", "", "", {AutoCommit => 0}) or die $!;
 
@@ -18,8 +18,8 @@ sub year {
 }
 
 sub valid_year {
-    my $min_year = 2010; # 2000 in the assignment
-    my $max_year = 2010;
+    my $min_year = 2007; # 2000 in the assignment
+    my $max_year = 2007; # 2010 in the assignment
     return ($_[0] >= $min_year and $_[0] <= $max_year);
 }
 
@@ -44,7 +44,7 @@ sub import_movies {
             # TODO: maybe don't filter here but with $date later, to
             # avoid some foreign key problems with other files ?
             if (valid_year($year)) {
-                if ($id =~ /"(.+)" \(([0-9]{4})[^\)]*\) \{(.*)(\(#([0-9]{1,3})\.([0-9]{1,3})\))?\}$/) {
+                if ($id =~ /"(.+)" \(([0-9]{4})[^\)]*\) \{([^\(]*)(\(#([0-9]{1,3})\.([0-9]{1,3})\))?\}$/) {
                     $title = $1;
                     $date = $2;
                     $epi_title = $3;

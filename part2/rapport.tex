@@ -288,11 +288,6 @@ select ID from Episode
                         and Actor.ID = Episode.ID)
     \end{lstlisting}
   \item R5 :
-%% select FirstName, LastName, Num, count(*) as Count
-%%   from Actor, Serie
-%%   where Actor.ID = Serie.ID
-%%   group by FirstName,LastName,Num
-%%   order by Count desc
     \begin{lstlisting}
 select FirstName, LastName, Num from Actor, Serie
  where Actor.ID = Serie.ID
