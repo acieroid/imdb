@@ -180,20 +180,21 @@ Les requêtes demandées étaient les suivantes:
   \item R2 :
     \begin{align*}
       MovieWriter & \leftarrow Writer * (Work * Movie) \\
-      MovieWriter' & \leftarrow \alpha_{ID,Title:ID2,Title2} (MovieWriter) \\
-      R2 & \leftarrow \pi_{FirstName,LastName,Num} (MovieWriter \Join_{ID \neq ID2 \wedge Title \neq Title2} MovieWriter')
+      MovieWriter' & \leftarrow \alpha_{ID:ID2} (MovieWriter) \\
+      R2 & \leftarrow \pi_{FirstName,LastName,Num} (MovieWriter \Join_{ID \neq ID2} MovieWriter')
     \end{align*}
   \item R3 :
     Si les infos sur l'acteur X sont dans $XFName$, $XLName$, $XNum$
-    \begin{align*}
-      A & \leftarrow Movie * \pi_{ID}(\sigma_{FirstName = XFName \wedge LastName = XLName \wedge Num = XNum} (Actor)) \\
-      B & \leftarrow \pi_{FirstName,LastName,Num}(\sigma_{FirstName \neq XFName \wedge LastName \neq XLName \wedge Num \neq XNum}(Actor) * A) \\
-      C & \leftarrow Movie * \pi_{ID}(Actor * B) \\
-      D & \leftarrow \pi_{FirstName,LastName,Num}(\sigma_{FirstName \neq XFName \wedge LastName \neq XLName \wedge Num \neq XNum}(Actor) * C)
-    \end{align*}
+    \begin{alignat*}{4}
+      XActor & \leftarrow \sigma_{FirstName = XFName \wedge LastName = XLName \wedge Num = XNum} (Actor) \\
+      XMovies & \leftarrow Movie * \pi_{ID}(XActor) \\
+      Dist1 & \leftarrow \pi_{FirstName,LastName,Num}((Actor - XActor) * XMovies) \\
+      Dist1Movies & \leftarrow Movie * \pi_{ID}(Actor * Dist1) \\
+      R3 & \leftarrow \pi_{FirstName,LastName,Num}((Actor - XActor) * Dist1Movies)
+    \end{alignat*}
   \item R4 :
     \begin{align*}
-      R4 & \leftarrow \pi_{ID} (Episodes) - \pi_{ID} ((\sigma_{Gender='M'} Person) * Actor * Episode)
+      R4 & \leftarrow \pi_{ID} (Episodes) - \pi_{ID} (\sigma_{Gender='M'} (Person) * Actor)
     \end{align*}
 \end{list}
 \subsection{Calcul relationnel tuple}
