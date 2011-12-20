@@ -114,7 +114,7 @@ Admin(\underline{Mail}, Password)
 Pour extraire les données depuis les fichiers d'\emph{IMDB}, Perl a
 été choisi, grâce à la facilité d'écrire des programmes manipulant du
 texte ainsi qu'à la présence du module \texttt{DBI}, qui permet de
-manipuler plusieurs moteurs de base de donnée en passant par une
+manipuler plusieurs moteurs de base de données en passant par une
 interface unique. Il a ainsi pu être possible de tester la vitesse
 d'importation de données sur plusieurs moteurs de base de données, et
 le choix de moteur s'est posé sur \emph{SQLite} pour plusieurs
@@ -126,7 +126,7 @@ raisons:
     d'import des données. Il est possible de désactiver ces tests dans
     d'autres moteurs, mais cela dépend des moteurs et varie en
     complexité.
-  \item Comme la base de donnée est simplement stockée dans un
+  \item Comme la base de données est simplement stockée dans un
     fichier, il est très simple de la mettre en place sur une nouvelle
     machine, d'en faire des sauvegardes, et de repartir avec une base
     de données vide.
@@ -136,7 +136,7 @@ raisons:
 
 Pour améliorer la vitesse d'importation, les choses suivantes ont été faites:
 \begin{list}{-}{}
-  \item la base de donnée a été placée en RAM (dans
+  \item la base de données a été placée en RAM (dans
     \texttt{/dev/shm/}) afin de ne pas être limité par la vitesse
     d'écriture du disque dur~;
   \item le \emph{journal} de SQLite a été désactivé (\texttt{pragma
@@ -210,15 +210,16 @@ Les requêtes demandées étaient les suivantes:
     \end{align*}
   \item R2 :
     \begin{align*}
-      \{ a1.FirstName, a1.LastName, a1.Num | &Writer(a1) \\
-      \wedge \exists w1, w2, a2, f1, f2 ( \\
-      &Work1(w1) \wedge Work2(w2) \wedge Writer(a2) \wedge Movie(f1) \wedge Movie(f2) \\
-      \wedge &w1.ID = f1.ID \wedge w1.ID = a1.ID
-      \wedge &w2.ID = f2.ID \wedge w2.ID = a2.ID
-      \wedge &a1.FirstName = a2.FirstName \wedge a1.LastName = a2.LastName \\
-      \wedge &a1.Num = a2.Num \\
-      \wedge &w2.Year = w1.Year \\
-      \wedge &w2.ID \neq w1.ID ) \}
+      \{ a1.FirstName, a1.LastName, a1.Num | &Writer(a1) \wedge \exists w1, w2, a2, f1, f2 ( \\
+      &Work1(w1) \wedge Work2(w2) \wedge Writer(a2) \wedge \\
+      & Movie(f1) \wedge Movie(f2) \wedge \\
+      & w1.ID = f1.ID \wedge w1.ID = a1.ID \wedge \\
+      & w2.ID = f2.ID \wedge w2.ID = a2.ID \wedge \\
+      & a1.FirstName = a2.FirstName \wedge \\
+      & a1.LastName = a2.LastName \wedge \\
+      & a1.Num = a2.Num \wedge \\
+      & w1.Year = w2.Year \wedge \\
+      & w1.ID \neq w2.ID ) \}
     \end{align*}
   \item R3 :
     Si les infos sur l'acteur X sont dans $XFName$, $XLName$, $XNum$
@@ -323,7 +324,7 @@ Afin de consulter les données, une interface web a été développée en
 Python, en utilisant les technologies suivantes:
 \begin{list}{-}{}
   \item \emph{Tornado} comme serveur web, ainsi que module de templates~;
-  \item \emph{SQLite 3} pour manipuler la base de donnée~;
+  \item \emph{SQLite 3} pour manipuler la base de données~;
   \item \emph{Lex} et \emph{Yacc} pour parser le langage de recherche.
 \end{list}
 
