@@ -33,7 +33,7 @@ precedence = (
 
 t_OPERATOR = r'(and|or)'
 t_SORT = r'sort(\+|\-)'
-t_COMPARATOR = r'(>=|<=|<|>|==|=~)'
+t_COMPARATOR = r'(>=|<=|<|>|==|!=|=~)'
 t_IDENTIFIER = r'[A-Z][a-zA-Z_]+'
 def t_VALUE(t):
     r'("[^"]+"|[0-9\.]+)'
@@ -98,6 +98,7 @@ def convert(l):
         'and': ' and ',
         'or': ' or ',
         '==': ' = ',
+        '!=': ' <> ',
         '=~': ' like ',
         '<': ' < ',
         '<=': ' <= ',
@@ -117,11 +118,10 @@ def convert(l):
     def valid_var(t, x):
         if t == 'Episode':
             return (valid_var('Serie', x) or 
-                    in_list(x, ['Title', 'Year', 'Note', 'EndYear', 
-                                'Season', 'EpisodeNum', 'EpisodeTitle']))
+                    in_list(x, ['EndYear', 'Season', 'EpisodeNum', 'EpisodeTitle']))
         elif t == 'Serie':
-            return (valid_var('Movie', x) or x == 'EndYear')
-        elif t == 'Movie':
+            return (valid_var('Work', x) or x == 'EndYear')
+        elif t == 'Work':
             return in_list(x, ['Title', 'Year', 'Note', 'Genre', 'Language', 'Country'])
         elif t == 'Person':
             return in_list(x, ['FirstName', 'LastName', 'Num'])
@@ -177,7 +177,7 @@ def convert(l):
                         []), '', helper(l))
         t = 'Person'
     else:
-        if satisfies(l, lambda x: not valid_var('Movie', x)):
+        if satisfies(l, lambda x: not valid_var('Work', x)):
             raise QueryError('Query contains invalid variable for movie')
         res = combine(('select W.ID from Work W where ', []), '', helper(l))
         t = 'Work'

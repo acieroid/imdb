@@ -87,7 +87,6 @@ class AdminAddWork(BasePage):
                 note = int(note)
                 if note < 0 or note < 10:
                     raise ValueError('Invalid note')
-            print note
             if t == 'episode':
                 season = int(self.get_argument('season', ''))
                 epi_num = int(self.get_argument('epi_num', ''))
