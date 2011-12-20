@@ -16,13 +16,13 @@ def work_link(ID):
             return ('Invalid movie ID: %s' % escape(ID))
     elif ID.find('{') != -1:
         # Episode
-        res = re.search('^"(.+)" \(([0-9]{4})[^\)]*\) \{(.*)\(#([0-9]{1,3})\.([0-9]{1,3})\)\}$', ID)
+        res = re.search('^"(.+)" \(([0-9]{4})[^\)]*\) \{([^\(]*)(\(#([0-9]{1,3})\.([0-9]{1,3})\))?\}$', ID)
         if res:
             title = escape(res.group(1))
             year = escape(res.group(2))
             epi_name = escape(res.group(3))
-            season = escape(res.group(4))
-            epi_num = escape(res.group(5))
+            season = escape(res.group(5) or '')
+            epi_num = escape(res.group(6) or '')
             return ('<a href="/episode/%s">%s (%s) %sx%s: %s</a>' % (url_escape(ID), title, year, season, epi_num, epi_name))
         else:
             return ('Invalid episode ID: %s' % escape(ID))
